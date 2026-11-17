@@ -35,5 +35,22 @@
     "sources": []
   },
   "seismicProfiles": [],
-  "faults": []
+  "faults": [],
+  "reference": {
+    "horizontal": "LOCAL",
+    "vertical": "LOCAL",
+    "confirmed": false,
+    "epoch": "",
+    "note": "Raumbezug der Altdatei noch nicht bestätigt."
+  },
+  "workspace": {
+    "schema": 2,
+    "projectId": "5ef9a8de-14e9-4a2e-8daa-52d547ab8548",
+    "measurements": [],
+    "history": [],
+    "sources": [],
+    "detached": [],
+    "bookmarks": [],
+    "revision": 0
+  }
 }

@@ -2,7 +2,7 @@
 
 **[Website öffnen](https://frederikurbancy29.github.io/3D-geological-Model-/)** · [Quellcode und Änderungen](https://github.com/frederikurbancy29/3D-geological-Model-)
 
-Interaktive Browserdemo für einen geologischen Untergrund mit Gelände, regionalen Schichten, lokalen Ablagerungskörpern, Granitintrusion, Bohrungen und Seismikprofilen. Die Beispieldaten sind synthetisch.
+Lokale GIS-Arbeitsoberfläche mit 2D-/3D-Ansichten, mehreren Projekten, bearbeitbaren Informationslayern und nachvollziehbaren Modellberechnungen. Die geologische Demo enthält Gelände, regionale Schichten, lokale Ablagerungskörper, Granitintrusion, Bohrungen und Seismikprofile. Die Beispieldaten sind synthetisch.
 
 ![Vorschau](dist/VORSCHAU.jpg)
 
@@ -15,18 +15,37 @@ Die veröffentlichte Website funktioniert ohne Installation. Alternativ die Date
 - Deckkraft, Schnittposition und Höhenüberhöhung verändern.
 - Bohrprofile, Höhen und Tiefen untersuchen.
 - Eigene tiefenkonvertierte Seismikbilder als PNG/JPG georeferenzieren.
+- Projekte neu erstellen, kopieren, archivieren und als Datei sichern; getrennte Speicherung in IndexedDB.
+- Layer gruppieren, sperren, einfärben und entfernen; entfernte Layer aus der Datenablage wieder einladen.
+- GeoJSON mit Originaldatei und Herkunft importieren; getrennte Layer- und Objektattribute bearbeiten.
+- Attributtabelle filtern, sortieren, Auswahl bearbeiten und als CSV exportieren; Objekte per Rechteck auswählen.
+- GIS-Stützpunkte numerisch bearbeiten, Geometrien um ein angegebenes Zentrum drehen und verschieben; in 2D mit Fangtoleranz zeichnen.
+- Strecken, Winkel, Flächen und Gitterkörpervolumen mit Raumbezug, Methode und Datenrevision protokollieren.
+- Geologische Schnittprofile berechnen und die abgetasteten Werte exportieren.
 
 Die Demo enthält eine Fläche von 10 × 8 km, Bergketten und eine Talstadt, sieben regionale Rahmenschichten, sechs lokale Ablagerungskörper, eine Granitintrusion, vierzehn Bohrungen, zwei Profilflächen und eine Störungsinterpretation.
 
 ## Eigene Daten
 
-1. **Daten verwalten → Alle Modelldaten löschen** leert das aktive Projekt.
+1. **Projekte → Leeres Projekt** erstellt einen eigenen Arbeitsstand. **Daten verwalten → Alle Modelldaten löschen** leert das aktive Projekt einschließlich seiner projektbezogenen Datenablage.
 2. Die passende Vorlage herunterladen, bearbeiten und wieder importieren.
 3. **Projekt speichern** sichert Daten und Ansicht in einer JSON-Datei.
 
 Importierte Dateien werden im Browser verarbeitet und nach Möglichkeit dort gespeichert. Die Website lädt diese Daten nicht auf GitHub hoch und synchronisiert sie nicht zwischen Personen oder Geräten. Für eine dauerhafte Sicherung die Projektdatei exportieren.
 
-Unterstützt werden GeoLab-JSON, die dokumentierten CSV-Formate und georeferenzierte Profilbilder. Gewöhnliches WGS84-GeoJSON, GeoTIFF, Shapefile, LAS und SEG-Y werden nicht direkt gelesen. Zeitseismik benötigt eine fachliche Zeit-Tiefen-Konvertierung, bevor sie mit metrischen Z-Werten dargestellt wird.
+Unterstützt werden GeoLab-JSON, die dokumentierten CSV-Formate, GeoJSON-FeatureCollections (Point, LineString, Polygon ohne Löcher) und georeferenzierte Profilbilder. GeoTIFF, Shapefile, LAS und SEG-Y werden nicht direkt gelesen. Zeitseismik benötigt eine fachliche Zeit-Tiefen-Konvertierung, bevor sie mit metrischen Z-Werten dargestellt wird.
+
+### Raumbezug und Rechentreue
+
+Als metrische Projektbezüge stehen lokale Meterkoordinaten, ETRS89/UTM 32N und 33N sowie WGS84/UTM 32N und 33N bereit. GeoJSON kann aus EPSG:4258 bzw. EPSG:4326 oder der jeweils anderen unterstützten UTM-Zone innerhalb **derselben Datumsfamilie** projiziert werden. Die Anwendung setzt WGS84 und ETRS89 nicht gleich. Die reguläre UTM-Zone und Nordhalbkugel werden geprüft. Koordinaten mit vorangestellter Zonenkennziffer werden nicht als gewöhnliche UTM-Rechtswerte umgedeutet.
+
+Lage- und Höhenbezug müssen bestätigt werden. Die Zuweisung eines Projektbezugs ändert keine vorhandenen Zahlen. CSV und regelmäßige Gitter müssen bereits im Projektbezug vorliegen. Es gibt keine Datums-, Epochen-, Quasigeoid- oder NHN-Umrechnung. Für Bayern ist DHHN2016 als Höhenreferenz auswählbar; dies validiert die Höhe einer Quelldatei nicht automatisch.
+
+Berechnungen verwenden die gespeicherten Zahlen in doppelter Genauigkeit, unabhängig von GPU-Darstellung, Kamera, Schnitt und Höhenüberhöhung. Gitterstrecke, ellipsoidische Geodäte und örtliche Bodenstrecke sind unterschiedliche Größen. Die 3D-Strecke ist eine Strecke im metrischen Projektkoordinatenraum. Flächen sind wahlweise horizontal projiziert oder aus angegebenen 3D-Polygonstützpunkten trianguliert. Volumen beziehen sich auf das vollständige Ober-/Unterkanten-Gitter, trianguliert entlang SW–NE; überlappende Körper werden nicht gegenseitig abgezogen. Unsicherheiten der Eingabedaten und geologischen Interpretation bleiben bestehen.
+
+Numerische Bearbeitung verändert derzeit GIS-Punkte, Linien und einfache Flächen. Geologische Körper bleiben Ober-/Unterkanten-Gitter; beliebige überhängende Volumennetze, automatische Störungsversätze oder ein geologischer Interpolationssolver sind nicht enthalten. Bohrintervalle und geologische Gitter werden über validierte Datendateien bearbeitet.
+
+Alte Einzelprojekte werden beim ersten Öffnen übernommen. Die frühere Browserablage wird nicht gelöscht. Die letzten acht Änderungen lassen sich in der aktuellen Sitzung rückgängig machen; das dauerhafte Änderungsprotokoll enthält Beschreibungen, keine vollständige Versionshistorie. Projektkopien sichern alternative Szenarien.
 
 - [Anleitung und Datenformate](dist/ANLEITUNG.txt)
 - [Geologische Grundlagen, Quellen und Modellannahmen](dist/GEOLOGISCHES_KONZEPT.txt)
@@ -47,15 +66,25 @@ Die Website und die im Repository abgelegten Beispieldateien sind je nach Pages-
 
 ## Lokal weiterentwickeln
 
-Die laufende Website benötigt keine externen Bibliotheken und keinen Anwendungsserver. Zum Neuerstellen werden Python 3 und Node.js 24 verwendet; zusätzliche Pakete sind nicht erforderlich.
+Die Website benötigt keinen Anwendungsserver. Proj4js 2.23.0 und GeographicLib-Geodesic 2.2.0 sind mit Lizenztexten lokal eingebunden; zur Laufzeit werden keine Bibliotheken aus dem Internet nachgeladen. Zum Neuerstellen werden Python 3 und Node.js 24 verwendet; eine Paketinstallation ist nicht erforderlich.
 
 ```sh
-node --test core.test.cjs sedimentary.test.cjs integration.test.cjs
+node --test core.test.cjs sedimentary.test.cjs integration.test.cjs workspace.test.cjs
 python3 build.py
 node examples.cjs
 ```
 
 `build.py` verbindet die Quelldateien zu einer eigenständig nutzbaren HTML-Datei. `examples.cjs` erstellt die austauschbaren Datenvorlagen.
+
+Die 41 automatisierten Prüfungen umfassen unabhängige PROJ-/GeographicLib-Referenzwerte, analytisch bekannte Strecken, Flächen, Winkel und Volumen, verbotene Datums-/Höhenwechsel, Polygonfehler, Fangtoleranzen, Projekttrennung, Originaldaten und die vorhandene geologische Demo. Browserprüfungen ergänzen Projektwechsel, Speichern/Wiederöffnen, Attributbearbeitung, numerische Drehung, Rückgängig und Wiederherstellung entfernter Layer.
+
+### Grundlagen der Koordinatenberechnungen
+
+- [Proj4js: Definitionen und Achsreihenfolge](https://proj4js.org/)
+- [GeographicLib: Geodäten und Referenzbeispiel](https://geographiclib.sourceforge.io/html/js/)
+- [PROJ: unabhängiger UTM-Referenzwert](https://proj.org/en/stable/usage/quickstart.html)
+- [Bayerische Vermessungsverwaltung: Referenzsysteme und Höhen](https://www.ldbv.bayern.de/vermessung/satellitenpositionierung/grundlagen.html)
+- [BKG: Übergang zwischen ellipsoidischer Höhe und DHHN2016](https://gibs.bkg.bund.de/geoid/gserlaeuter_g.php)
 
 ## Fachlicher Umfang
 

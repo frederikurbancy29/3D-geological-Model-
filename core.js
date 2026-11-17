@@ -49,7 +49,7 @@
   function identifiers(rows,label){const ids=new Set();rows.forEach(r=>{r.id=text(r.id);if(!r.id)fail(label+': eine ID fehlt.');if(ids.has(r.id))fail(label+': doppelte ID „'+r.id+'“.');ids.add(r.id);});return ids;}
   function validate(input) {
     if(!input||input.format!=='geolab-3d'||input.version!==1)fail('Keine GeoLab-Projektdatei (format: geolab-3d, version: 1). Bitte die JSON-Projektvorlage verwenden.');
-    const p=clone(input);p.metadata={name:text(p.metadata?.name,'Mein Untergrundmodell')||'Mein Untergrundmodell',crs:text(p.metadata?.crs,'Projektkoordinaten in Metern'),heightDatum:text(p.metadata?.heightDatum,'m (lokaler Höhenbezug)'),synthetic:p.metadata?.synthetic===true};
+    const p=clone(input);p.metadata={...p.metadata,name:text(p.metadata?.name,'Mein Untergrundmodell')||'Mein Untergrundmodell',crs:text(p.metadata?.crs,'Projektkoordinaten in Metern'),heightDatum:text(p.metadata?.heightDatum,'m (lokaler Höhenbezug)'),synthetic:p.metadata?.synthetic===true};
     for(const key of ['layers','boreholes','gisLayers'])if(!Array.isArray(p[key]))p[key]=[];
     if(p.layers.length>100||p.boreholes.length>2000||p.gisLayers.length>500)fail('Die Datei überschreitet die Demogrenze (100 Schichten, 2.000 Bohrungen, 500 Geolayer).');
     if(p.terrain){const t=p.terrain;axis(t.x,'Gelände X');axis(t.y,'Gelände Y');if(t.x.length*t.y.length>25000||t.x.length*t.y.length*Math.max(1,p.layers.length)>250000)fail('Das Gitter ist für diese Browserdemo zu groß. Bitte Raster reduzieren (max. 25.000 Geländepunkte und 250.000 Schicht-Gitterpunkte).');matrix(t.z,t.x.length,t.y.length,'Geländehöhen');t.name=text(t.name,'Gelände / Höhenmodell');t.visible=t.visible!==false;t.opacity=clamp(numeric(t.opacity,.78),0,1);}else p.terrain=null;

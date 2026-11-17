@@ -37,7 +37,14 @@
       ]
     ],
     "visible": true,
-    "opacity": 0.8
+    "opacity": 0.8,
+    "properties": {},
+    "workspace": {
+      "group": "Höhenmodell",
+      "status": "synthetisch",
+      "source": "Erfundener Demonstrationsdatensatz",
+      "locked": false
+    }
   },
   "layers": [
     {
@@ -62,7 +69,14 @@
         ]
       ],
       "visible": true,
-      "opacity": 1
+      "opacity": 1,
+      "properties": {},
+      "workspace": {
+        "group": "Rahmenschicht",
+        "status": "synthetisch",
+        "source": "Erfundener Demonstrationsdatensatz",
+        "locked": false
+      }
     },
     {
       "id": "rock",
@@ -86,7 +100,14 @@
         ]
       ],
       "visible": true,
-      "opacity": 1
+      "opacity": 1,
+      "properties": {},
+      "workspace": {
+        "group": "Rahmenschicht",
+        "status": "synthetisch",
+        "source": "Erfundener Demonstrationsdatensatz",
+        "locked": false
+      }
     }
   ],
   "boreholes": [
@@ -124,7 +145,14 @@
           "layer_id": "rock",
           "lithology": "Festgestein"
         }
-      ]
+      ],
+      "properties": {},
+      "workspace": {
+        "group": "Bohrung",
+        "status": "synthetisch",
+        "source": "Erfundener Demonstrationsdatensatz",
+        "locked": false
+      }
     }
   ],
   "gisLayers": [
@@ -156,7 +184,14 @@
             ]
           ]
         }
-      ]
+      ],
+      "properties": {},
+      "workspace": {
+        "group": "Geoinformationslayer",
+        "status": "synthetisch",
+        "source": "Erfundener Demonstrationsdatensatz",
+        "locked": false
+      }
     }
   ],
   "view": {
@@ -227,7 +262,14 @@
         ]
       ],
       "visible": true,
-      "opacity": 1
+      "opacity": 1,
+      "properties": {},
+      "workspace": {
+        "group": "Geologischer Körper",
+        "status": "synthetisch",
+        "source": "Erfundener Demonstrationsdatensatz",
+        "locked": false
+      }
     }
   ],
   "paleosurfaces": [
@@ -265,7 +307,14 @@
       ],
       "visible": true,
       "opacity": 0.15,
-      "facies": "Nicht zugeordnet"
+      "facies": "Nicht zugeordnet",
+      "properties": {},
+      "workspace": {
+        "group": "Paläorelief",
+        "status": "synthetisch",
+        "source": "Erfundener Demonstrationsdatensatz",
+        "locked": false
+      }
     }
   ],
   "interpretation": {
@@ -276,5 +325,22 @@
     "sources": []
   },
   "seismicProfiles": [],
-  "faults": []
+  "faults": [],
+  "reference": {
+    "horizontal": "LOCAL",
+    "vertical": "LOCAL",
+    "confirmed": false,
+    "epoch": "",
+    "note": "Fiktive Demo-Lage und Höhen."
+  },
+  "workspace": {
+    "schema": 2,
+    "projectId": "a61c22b5-9ad2-411b-8b38-45cbccd932e3",
+    "measurements": [],
+    "history": [],
+    "sources": [],
+    "detached": [],
+    "bookmarks": [],
+    "revision": 0
+  }
 }

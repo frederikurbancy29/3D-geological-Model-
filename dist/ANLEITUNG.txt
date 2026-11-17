@@ -1,3 +1,70 @@
+GEOLAB WORKSPACE 2.0 – NEUE WERKZEUGE
+
+PROJEKTE
+Über Projekte ein leeres Projekt, eine neue Demo oder eine Szenariokopie anlegen.
+Jedes Projekt besitzt einen eigenen lokalen Speicherstand in IndexedDB.
+Projekte lassen sich archivieren und als GeoLab-JSON-Datei sichern. Eigene
+Dateien werden nicht auf GitHub hochgeladen. Browserdaten sind keine dauerhafte
+Sicherung. Alte Einzelprojekte werden übernommen, ihre bisherige Ablage bleibt
+als Rückfallstand erhalten. Das Leeren des aktiven Modells leert auch dessen
+Datenablage; andere Projekte bleiben bestehen.
+
+LAYER UND BEARBEITUNG
+Links stehen gruppierte, einzeln schaltbare Layer. Rechts lassen sich Name,
+Gruppe, Farbe, Deckkraft, Datenart, Herkunft und Lageunsicherheit ändern. Eine
+Bearbeitungssperre schützt GIS-Geometrien und Attribute. Entfernte Layer stehen
+unter Datenablage zum erneuten Einladen bereit. Importierte Originaldateien
+bleiben separat erhalten. Zusätzliche Layerattribute stehen unter Eigene
+Layerattribute zur Verfügung.
+
+Die Attributtabelle filtert und sortiert Objekte. Häkchen, Treffer auswählen
+oder Rechteckauswahl in der Karte wählen Objekte zur gemeinsamen Bearbeitung.
+GIS-Objekte haben eigene Attributfelder mit Typ und optionaler Einheit. Ihre
+Stützpunkte werden numerisch bearbeitet; Verschieben und Drehen benötigt ein
+explizites Drehzentrum. Zeichnen ist im 2D-Grundriss mit Fangfunktion möglich.
+Kartenklicks sind digitalisiert. Exakte Eingabekoordinaten über die numerischen
+Felder kontrollieren. Geologische Gitter und Bohrintervalle werden über die
+Datenvorlagen bearbeitet. Rückgängig/Wiederholen hält acht Änderungen in dieser
+Sitzung; das dauerhafte Änderungsprotokoll enthält Beschreibungen.
+
+RAUMBEZUG UND MESSEN
+Für Bayern ETRS89/UTM 32N oder 33N entsprechend dem Quellbezug auswählen.
+Alternativ lokale Meterkoordinaten oder WGS84/UTM 32N/33N. GeoJSON kann aus
+ETRS89-Länge/Breite (EPSG:4258) nach ETRS89/UTM oder aus WGS84-Länge/Breite
+(EPSG:4326) nach WGS84/UTM umgerechnet werden. X/Y ist stets Ost/Nord bzw.
+Länge/Breite. Z bleibt unverändert. Ein Wechsel zwischen WGS84 und ETRS89 wird
+abgewiesen. Ebenso werden abweichende Höhenbezüge und Koordinaten außerhalb der
+regulären Ziel-UTM-Zone abgewiesen. NHN und ellipsoidische Höhe benötigen eine
+fachliche Höhenumrechnung; diese Anwendung besitzt kein Quasigeoidmodell.
+Koordinaten mit Zonenpräfix (z.B. 32...) zuvor fachgerecht umrechnen.
+
+Messen berechnet Gitterstrecken (2D), Strecken im metrischen Projektkoordinaten-
+raum (3D), ellipsoidische Geodäten, ebene Innenwinkel und Gitterazimute.
+Flächen sind horizontal projiziert oder aus dem eingegebenen 3D-Polygonring
+trianguliert. Sie sind keine automatisch auf dem Gelände gemessenen Flächen.
+Körpervolumen verwenden das vollständige triangulierte Ober-/Unterkanten-Gitter.
+Überlappungen mit anderen Körpern werden nicht abgezogen. Ansichtsschnitt und
+Höhenüberhöhung ändern diese Berechnungen nicht. Messprotokolle enthalten
+Methode, Raumbezug, Stützpunkte (soweit anwendbar) und Datenrevision.
+Gitter-, Ellipsoid- und örtliche Bodenstrecken unterscheiden sich. Die Anwendung
+rechnet nicht automatisch auf eine örtlich gemessene Bodenstrecke um.
+Nachkommastellen sind kein Nachweis der tatsächlichen Messgenauigkeit.
+
+SCHNITTE UND PRÜFUNGEN
+Schnittprofil erzeugt einen senkrechten Modellquerschnitt zwischen zwei X/Y-
+Punkten mit 201 Stationen. Horizonte werden bilinear abgetastet. Die vertikale
+Darstellungsüberhöhung wird ausgewiesen. Die abgetasteten Werte lassen sich
+exportieren. Daten prüfen zeigt Herkunft, Raumbezug, Bohransatzabweichungen und
+Differenzen zwischen zugeordneten Bohrkontakten und Körpergrenzen. Die Prüfung
+ersetzt keine unabhängige fachliche Modellvalidierung.
+
+TECHNIK
+Proj4js 2.23.0 und GeographicLib-Geodesic 2.2.0 sind lokal eingebunden; die
+Lizenztexte liegen im Ordner lizenzen. Keine nachgeladenen Bibliotheken, keine
+Anmeldung und keine Übertragung importierter Daten an einen Server.
+
+DIE FOLGENDEN ABSCHNITTE DOKUMENTIEREN DIE GEOLOGISCHE DEMO UND CSV-FORMATE.
+
 GEOLAB 3D — LOKALE DEMO
 ======================
 
@@ -31,7 +98,8 @@ DEMODATEN ERSETZEN
    01-gelaende.csv, 02-schichten.csv, 05-lokale-koerper.csv,
    06-palaeorelief.csv, 03-bohrungen.csv, 04-geolayer.csv.
    Alternativ eine einzige vollständige GeoLab-Projektdatei als JSON öffnen.
-3. Unter Projekteinstellungen Namen, Koordinatenbezug und Höhenbezug anpassen.
+3. Über die Werkzeugleiste Raumbezug festlegen und die Quelldaten prüfen.
+   Die Zuweisung ändert keine vorhandenen Koordinaten.
 4. Projekt speichern lädt eine JSON-Datei mit allen Daten und der Ansicht.
    Diese Datei ist deine dauerhafte Sicherung und lässt sich wieder importieren.
 
@@ -44,9 +112,12 @@ zusätzlichen Geolayer über '+ Hinzufügen' eine neue eindeutige layer_id verwe
 KOORDINATEN UND HÖHEN
 X und Y sind projizierte Koordinaten in Metern, beispielsweise UTM-Koordinaten.
 Z ist eine absolute Höhe im von dir angegebenen Bezug (z. B. m NHN).
-Keine automatische Projektion, Georeferenzierung oder Höhentransformation.
+CSV und Gitter werden ohne Umrechnung eingelesen. GeoJSON kann über Daten laden
+innerhalb derselben unterstützten Datumsfamilie projiziert werden. Keine
+automatische Datums-, Epochen- oder Höhentransformation.
 Längen- und Breitengrade dürfen nicht als X/Y in Metern eingesetzt werden.
-Ein angegebener EPSG-Code dokumentiert lediglich den Bezug der Eingabewerte.
+Das Feld reference legt den Rechenbezug fest. Freie Metadatenbezeichnungen
+allein transformieren keine Zahlen.
 Eine lokale Lage und ein lokaler Höhenbezug sind ebenfalls möglich.
 Bohrtiefen from_m/to_m sind positive Tiefen ab collar_z (Bohransatz).
 Sohlhöhe = collar_z - to_m. Tiefe unter Gelände = Gelände-Z - Objekt-Z.
@@ -144,8 +215,9 @@ Bei großen Projekten kann die Browserablage voll werden. Die Anwendung zeigt
 dies an; sichere dann über Projekt speichern. Exportierte Dateien werden durch
 das Leeren des Modells nicht gelöscht. Die Anwendung überträgt keine Daten.
 
-Diese Version unterstützt JSON und die beschriebenen CSV-Formate. GeoTIFF,
-Shapefile, LAS/LAZ, DXF und gewöhnliches WGS84-GeoJSON werden nicht direkt gelesen.
+Diese Version unterstützt GeoLab-JSON, die beschriebenen CSV-Formate,
+GeoJSON-FeatureCollections und tiefenkonvertierte Profilbilder. GeoTIFF,
+Shapefile, LAS/LAZ, DXF und SEG-Y werden nicht direkt gelesen.
 Keine Basiskarte oder Orthofotos und keine automatische Ableitung der Geologie
 aus Bohrungen. Keine Grundwasser-, Wärme- oder geomechanische Prozesssimulation.
 Transparente Flächen sind eine visuelle Annäherung und können sich bei
