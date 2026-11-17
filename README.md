@@ -1,5 +1,7 @@
 # GeoLab 3D
 
+**[Website öffnen](https://frederikurbancy29.github.io/3D-geological-Model-/)** · [Quellcode und Änderungen](https://github.com/frederikurbancy29/3D-geological-Model-)
+
 Interaktive Browserdemo für einen geologischen Untergrund mit Gelände, regionalen Schichten, lokalen Ablagerungskörpern, Granitintrusion, Bohrungen und Seismikprofilen. Die Beispieldaten sind synthetisch.
 
 ![Vorschau](dist/VORSCHAU.jpg)
