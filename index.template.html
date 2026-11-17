@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; base-uri 'none'; object-src 'none'">
+  <meta name="description" content="Lokales 3D-Geologiemodell mit Gelände, Schichten, Bohrungen und eigenen Geodaten.">
+  <title>GeoLab 3D · Geologischer Untergrund</title>
+  <style>/*__STYLES__*/</style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand"><svg viewBox="0 0 36 36" width="36" height="36" aria-hidden="true"><path d="M3 12 18 4l15 8-15 8Z" fill="#176b68"/><path d="m3 18 15 8 15-8v6l-15 8-15-8Z" fill="#b7784c"/><path d="m3 12 15 8 15-8v5l-15 8-15-8Z" fill="#d9b270"/></svg><div><strong>GeoLab <span>3D</span></strong><small>DEIN UNTERGRUND. RÄUMLICH VERSTEHEN.</small></div></div>
+    <div class="header-project"><span id="project-badge" class="badge">SYNTHETISCHE DEMO</span><span id="project-name">Modellgebiet Hügelland</span></div>
+    <nav class="header-actions" aria-label="Projektaktionen">
+      <button id="open-data" class="button">Daten verwalten</button>
+      <button id="export-project" class="button primary">Projekt speichern ↓</button>
+      <button id="open-help" class="icon-button" aria-label="Anleitung öffnen">?</button>
+    </nav>
+  </header>
+
+  <main class="workspace">
+    <aside class="sidebar" aria-label="Layerverwaltung">
+      <div class="sidebar-head"><div><span class="eyebrow">MODELLINHALT</span><h1>Layer &amp; Bohrungen</h1></div><span id="layer-count" class="count">0</span></div>
+      <div class="layer-scroll">
+        <section class="layer-group">
+          <div class="group-heading"><h2>Oberfläche</h2><span id="terrain-resolution" class="subtle"></span></div>
+          <div id="terrain-controls"></div>
+          <div id="paleo-list"></div>
+        </section>
+        <section class="layer-group">
+          <div class="group-heading"><h2>Intrusionskörper</h2></div>
+          <div id="intrusion-list"></div>
+        </section>
+        <section class="layer-group body-group">
+          <div class="group-heading"><h2>Lokale Ablagerungskörper</h2><button id="toggle-bodies" class="text-button">Alle aus</button></div>
+          <div class="group-caption">Fazieskörper · Bohrtreffer und Interpretation getrennt</div>
+          <div id="body-list"></div>
+          <button id="open-science" class="text-button">Geologisches Konzept &amp; Quellen ↗</button>
+        </section>
+        <section class="layer-group">
+          <div class="group-heading"><h2>Geologische Schichten</h2><button id="toggle-geology" class="text-button">Alle aus</button></div>
+          <div class="group-caption">Von oben nach unten · geschlossene Schichtkörper</div>
+          <div id="geology-list"></div>
+        </section>
+        <section class="layer-group">
+          <div class="group-heading"><h2>Seismik &amp; Struktur</h2><button id="add-seismic" class="text-button">+ Profil</button></div>
+          <div class="group-caption">Georeferenzierte Profilflächen · Tiefendomäne</div>
+          <div id="seismic-list"></div>
+          <div id="fault-list"></div>
+          <button id="add-fault" class="text-button">+ Störungsinterpretation importieren</button>
+        </section>
+        <section class="layer-group">
+          <div class="group-heading"><label class="group-check"><input id="show-bores" type="checkbox" checked><h2>Bohrungen</h2></label><span id="bore-count" class="subtle"></span></div>
+          <label class="minor-check"><input id="xray-bores" type="checkbox" checked> Durch Schichten sichtbar</label>
+          <div id="bore-list" class="bore-list"></div>
+        </section>
+        <section class="layer-group">
+          <div class="group-heading"><h2>Weitere Geolayer</h2><button id="add-layer" class="text-button">+ Hinzufügen</button></div>
+          <div id="gis-list"></div>
+        </section>
+      </div>
+      <div class="sidebar-foot"><span class="local-dot"></span><span id="save-status">Daten bleiben in diesem Browser</span></div>
+    </aside>
+
+    <section class="viewer" aria-label="Interaktives dreidimensionales Modell">
+      <div class="viewer-top">
+        <div class="view-switch" role="group" aria-label="Kameraperspektive">
+          <button id="view-orbit" class="view-button active" aria-pressed="true">3D-Ansicht</button>
+          <button id="view-top" class="view-button" aria-pressed="false">Draufsicht</button>
+          <button id="view-front" class="view-button" aria-pressed="false">Südansicht</button>
+        </div>
+        <div class="viewer-actions"><button id="fit-view" class="button compact">Modell einpassen</button><button id="snapshot" class="button compact">Bild speichern</button></div>
+      </div>
+      <div id="canvas-wrap" class="canvas-wrap">
+        <canvas id="scene" aria-label="3D-Modell. Ziehen zum Drehen, Mausrad zum Zoomen. Mit Pfeiltasten drehen, Plus und Minus zum Zoomen, Taste F zum Einpassen." tabindex="0"></canvas>
+        <canvas id="labels" aria-hidden="true"></canvas>
+        <div class="scene-caption"><span class="eyebrow">GEOLOGISCHES STRUKTURMODELL</span><strong id="scene-title">Hügelland / synthetisch</strong><span id="scene-meta"></span></div>
+        <div class="compass" aria-label="Nordrichtung"><span>N</span><svg id="compass-needle" viewBox="0 0 50 50" aria-hidden="true"><path d="M25 6 17 33l8-5 8 5Z" fill="#176b68"/><path d="m25 28-8 5 8 9 8-9Z" fill="#a5b6bc"/></svg></div>
+        <div id="empty-scene" class="empty-scene" hidden><strong>Platz für deinen Untergrund.</strong><p>Importiere ein Projekt oder lade die Vorlagen mit deinen eigenen Daten.</p><div><button id="empty-import" class="button primary">Eigene Daten importieren</button><button id="empty-demo" class="button">Demo laden</button></div></div>
+        <div id="gl-error" class="empty-scene" hidden role="alert"><strong>Die 3D-Ansicht konnte nicht starten.</strong><p>Bitte öffne die Datei in einem Browser mit aktiviertem WebGL, beispielsweise Safari, Firefox, Chrome oder Edge.</p></div>
+        <div id="selection" class="selection" hidden aria-label="Ausgewähltes Objekt"><div class="selection-top"><span class="eyebrow" id="selection-kind">OBJEKTINFORMATION</span><button id="close-selection" class="icon-button" aria-label="Objektinformation schließen">×</button></div><div id="selection-content"></div></div>
+        <div class="navigation-hint" id="navigation-hint">Ziehen: drehen <span>·</span> Umschalt + ziehen: verschieben <span>·</span> Mausrad: zoomen</div>
+        <div class="scene-bottom"><span id="scale-label"></span><span id="coord-label">Alle Koordinaten in Metern</span></div>
+      </div>
+      <div class="viewer-settings">
+        <div class="setting"><label for="cut-range">Schnitt von Süden <output id="cut-value">15 %</output></label><input id="cut-range" type="range" min="0" max="90" value="15" step="1"><span id="cut-detail" class="setting-detail"></span></div>
+        <div class="setting"><label for="exaggeration">Höhenüberhöhung <output id="exaggeration-value">1,4×</output></label><input id="exaggeration" type="range" min="1" max="4" value="1.4" step="0.1"><span class="setting-detail">1× = maßstäbliche Höhe und Tiefe</span></div>
+        <div class="setting toggles"><label><input id="show-grid" type="checkbox" checked> Koordinaten &amp; Höhen</label><label><input id="show-contours" type="checkbox" checked> Höhenlinien</label><span class="setting-detail" id="model-range"></span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer"><span id="data-note">Alle Demoangaben sind erfunden. Keine Standort- oder Prozesssimulation.</span><span>Lokale Anwendung · ohne externe Bibliotheken</span></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <dialog id="data-dialog" class="data-dialog">
+    <div class="dialog-header"><div><span class="eyebrow">DEINE DATEN, DEIN MODELL</span><h2>Daten austauschen</h2></div><button data-close="data-dialog" class="icon-button" aria-label="Dialog schließen">×</button></div>
+    <div class="dialog-content">
+      <p class="intro">Starte mit der Demo oder ersetze sie durch eigene Daten. Dateien werden direkt in deinem Browser verarbeitet.</p>
+      <div class="data-tabs" role="group" aria-label="Datenauswahl"><button id="import-tab" class="button primary">Import &amp; Vorlagen</button><button id="project-tab" class="button">Projekteinstellungen</button></div>
+      <div id="import-panel">
+        <div class="import-form">
+          <label for="import-kind">Was möchtest du importieren?</label>
+          <select id="import-kind"><option value="project">Gesamtes Projekt · JSON</option><option value="terrain">Höhenmodell · CSV</option><option value="layers">Rahmenschichten · CSV</option><option value="bodies">Lokale Ablagerungskörper · CSV</option><option value="paleo">Paläorelief-Flächen · CSV</option><option value="bores">Bohrungen mit Intervallen · CSV</option><option value="gis">Weitere Geolayer · CSV</option><option value="faults">Störungsflächen · CSV</option></select>
+          <p id="import-description" class="field-help"></p>
+          <label id="import-mode-label" for="import-mode">Vorhandene Daten dieser Kategorie</label><select id="import-mode"><option value="replace">Ersetzen</option><option value="append">Ergänzen</option></select>
+          <div class="upload-zone" id="drop-zone"><strong>Datei auswählen oder hier ablegen</strong><span>CSV mit Semikolon oder Komma · Projektdatei als JSON</span><input id="import-file" type="file" accept=".csv,.json,text/csv,application/json" aria-label="Datei zum Import auswählen"></div>
+          <div id="import-feedback" class="import-feedback" role="status" aria-live="polite"></div>
+          <button id="download-template" class="button">Passende Vorlage herunterladen ↓</button>
+        </div>
+        <div class="data-guide"><strong>Einfachster Weg zu eigenen Daten</strong><ol><li>Passende Vorlage herunterladen und die Werte ersetzen.</li><li>Für ein neues Gebiet zuerst Gelände, dann Rahmenschichten, lokale Körper und zuletzt Bohrungen laden.</li><li>Paläorelief und weitere Geolayer ergänzen. Anschließend das Projekt speichern.</li></ol><p>Gemeinsame X/Y-Koordinaten in Metern; Z ist die absolute Höhe. Lokale Körper haben eigene, räumlich begrenzte Gitter. Bohrintervalle sind Tiefen ab Bohransatz. Keine automatische Koordinatentransformation oder geologische Rekonstruktion aus Bohrungen.</p></div>
+      </div>
+      <form id="project-panel" hidden>
+        <label for="meta-name">Projektname</label><input id="meta-name" maxlength="120" required>
+        <label for="meta-crs">Koordinatenbezug (projizierte X/Y-Koordinaten in Metern)</label><input id="meta-crs" maxlength="120" placeholder="z. B. ETRS89 / UTM Zone 32N, EPSG:25832">
+        <label for="meta-datum">Höhenbezug</label><input id="meta-datum" maxlength="60" placeholder="z. B. m NHN oder lokaler Höhenbezug">
+        <label class="minor-check"><input id="meta-synthetic" type="checkbox"> Dieses Projekt enthält synthetische Beispieldaten</label>
+        <p class="field-help">Die Bezeichnungen dokumentieren den Bezug deiner Werte. Das Ändern dieser Angaben transformiert keine Koordinaten.</p>
+        <button class="button primary" type="submit">Angaben übernehmen</button>
+      </form>
+      <div class="data-operations"><div><strong id="dataset-summary"></strong><span>Die aktuelle Ansicht und alle Sichtbarkeiten werden mitgespeichert.</span></div><div class="operation-buttons"><button id="reload-demo" class="button">Demo neu laden</button><button id="clear-data" class="button danger">Alle Modelldaten löschen</button><button id="undo-data" class="button" hidden>Löschen rückgängig</button></div></div>
+    </div>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="confirm-dialog"><div class="dialog-header"><h2 id="confirm-title">Daten ersetzen?</h2></div><div class="dialog-content"><p id="confirm-message"></p><div class="confirm-actions"><button id="confirm-cancel" class="button">Abbrechen</button><button id="confirm-ok" class="button primary">Fortfahren</button></div></div></dialog>
+  <dialog id="seismic-dialog" class="data-dialog"><div class="dialog-header"><div><span class="eyebrow">EIGENE PROFILFLÄCHE</span><h2>Seismikprofil hinzufügen</h2></div><button data-close="seismic-dialog" class="icon-button" aria-label="Seismikdialog schließen">×</button></div><form id="seismic-form" class="dialog-content seismic-form">
+    <p class="intro">Ein tiefenkonvertiertes Profilbild wird als senkrechte Fläche im Modell platziert. Linke Bildkante = Profilstart, obere Bildkante = obere absolute Höhe.</p>
+    <label for="seis-name">Profilname</label><input id="seis-name" required maxlength="120" value="Mein Seismikprofil">
+    <div class="seismic-fields"><div><label for="seis-x1">Start X / Ost (m)</label><input id="seis-x1" type="number" step="any" required></div><div><label for="seis-y1">Start Y / Nord (m)</label><input id="seis-y1" type="number" step="any" required></div><div><label for="seis-x2">Ende X / Ost (m)</label><input id="seis-x2" type="number" step="any" required></div><div><label for="seis-y2">Ende Y / Nord (m)</label><input id="seis-y2" type="number" step="any" required></div><div><label for="seis-top">Obere absolute Höhe Z (m)</label><input id="seis-top" type="number" step="any" required></div><div><label for="seis-bottom">Untere absolute Höhe Z (m)</label><input id="seis-bottom" type="number" step="any" required></div></div>
+    <p id="seis-datum" class="field-help"></p>
+    <label for="seis-image">Profilbild · PNG oder JPG</label><input id="seis-image" type="file" accept="image/png,image/jpeg,.png,.jpg,.jpeg" required>
+    <p class="field-help">Den eigentlichen Profilausschnitt ohne äußere Achsenbeschriftung verwenden. Die vertikale Bildachse muss linear in Metern kalibriert sein. Zeitprofile in ms TWT benötigen vorher eine Geschwindigkeits- und Datumskonvertierung. SEG-Y wird hier nicht direkt eingelesen. Bilder werden für die Anzeige auf höchstens 2.048 Pixel Kantenlänge begrenzt.</p>
+    <div id="seis-feedback" class="import-feedback" role="status" aria-live="polite"></div><button id="seis-submit" class="button primary" type="submit">Profil ins Modell übernehmen</button>
+  </form></dialog>
+  <dialog id="science-dialog" class="help-dialog"><div class="dialog-header"><div><span class="eyebrow">BEOBACHTUNG · MODELLANNAHME · INTERPRETATION</span><h2>Geologisches Konzept</h2></div><button data-close="science-dialog" class="icon-button" aria-label="Geologisches Konzept schließen">×</button></div><div id="science-content" class="dialog-content help-content"></div></dialog>
+  <dialog id="help-dialog" class="help-dialog"><div class="dialog-header"><div><span class="eyebrow">KURZANLEITUNG</span><h2>Dein Modell erkunden</h2></div><button data-close="help-dialog" class="icon-button" aria-label="Anleitung schließen">×</button></div><div class="dialog-content help-content"><h3>Bewegen &amp; untersuchen</h3><p>Ziehen dreht das gesamte Modell. Mit Umschalt + Ziehen oder der rechten Maustaste verschiebst du es; das Mausrad zoomt. Auf einem Touchscreen: ein Finger dreht, zwei Finger zoomen und verschieben. Mit den Pfeiltasten drehst du, mit +/− zoomst du, F passt das Modell ein.</p><p>Klicke auf eine Bohrung oder auf den Modellkörper: Du siehst Koordinaten, absolute Höhe und Tiefe unter Gelände. Bohrungen können auch in der Liste ausgewählt werden.</p><h3>Schichten &amp; Oberfläche</h3><p>Die Häkchen schalten jede Schicht und jeden Geolayer einzeln. Der Regler bei der Geländeoberfläche steuert ihre Deckkraft. „Schnitt von Süden“ entfernt einen Teil des Blocks und legt die Schichtkörper frei. Bohrungen im entfernten Bereich werden ebenfalls ausgeblendet.</p><p>Die Höhenüberhöhung macht flache Strukturen deutlicher; bei 1× sind horizontale und vertikale Maßstäbe gleich. Alle angezeigten Messwerte bleiben unabhängig davon unverändert.</p><h3>Eigene Daten</h3><p>Unter „Daten verwalten“ kannst du die Demo löschen und Vorlagen herunterladen. Ein vollständiges Projekt als JSON ist der einfachste Weg, Gelände, Schichten, Bohrungen und beliebig viele Geolayer zusammen zu speichern. CSV wird auch mit Dezimalkomma unterstützt, wenn Semikolon das Trennzeichen ist.</p><p>Ein Höhenmodell benötigt ein vollständiges rechteckiges X/Y-Punktgitter. Jede Schicht benötigt auf demselben Gitter eine Unterkante als absolute Höhe. Ihre Oberkante ergibt sich aus dem Gelände beziehungsweise der vorherigen Schicht. Grenzen dürfen sich nicht überschneiden. Die Demo interpoliert innerhalb der bereitgestellten Gitterzellen, berechnet aber keine Schichtgrenzen aus Bohrungen.</p><p>Weitere Geolayer unterstützen Punkte, Linien und einfache Polygone ohne Löcher. Eine leere Z-Zelle legt ein Objekt auf das Gelände. Dateien wie GeoTIFF, Shapefile, LAS oder gewöhnliches GeoJSON mit Längen-/Breitengraden werden in dieser Version nicht direkt importiert.</p><h3>Speichern</h3><p>Änderungen werden nach Möglichkeit lokal in diesem Browser gespeichert. Für eine dauerhafte Sicherung nutze „Projekt speichern“. Die heruntergeladene JSON-Datei kannst du später wieder öffnen. Es gibt keine Datenübertragung an einen Server.</p><p class="help-note">Diese Anwendung zeigt ein geologisches Strukturmodell mit lokalen Fazieskörpern, Intrusion, Rahmenschichten und Profilflächen. Granitnachweise liegen in der Demo in G-01 und G-02. Körpergrenzen und Kontakte bleiben vorgegebene Modellannahmen. Sie enthält keine Grundwasser-, Wärme- oder geomechanische Prozesssimulation. Die Demodaten sind vollständig erfunden.</p></div></dialog>
+  <script>/*__APP__*/</script>
+</body>
+</html>

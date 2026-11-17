@@ -1,0 +1,4 @@
+﻿layer_id;layer_name;geometry;feature_id;vertex_order;x;y;z;color;height_m;roof_height_m;roof_color
+line-1;Beispiellinie;LineString;L-01;1;0;50;;#398cbd;;;
+line-1;Beispiellinie;LineString;L-01;2;100;80;;#398cbd;;;
+line-1;Beispiellinie;LineString;L-01;3;200;100;;#398cbd;;;

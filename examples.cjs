@@ -1,0 +1,20 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+vm.runInThisContext(fs.readFileSync(path.join(__dirname,'core.js'),'utf8'));
+vm.runInThisContext(fs.readFileSync(path.join(__dirname,'sedimentary.js'),'utf8'));
+vm.runInThisContext(fs.readFileSync(path.join(__dirname,'seismic.js'),'utf8'));
+vm.runInThisContext(fs.readFileSync(path.join(__dirname,'landscape.js'),'utf8'));
+vm.runInThisContext(fs.readFileSync(path.join(__dirname,'intrusion.js'),'utf8'));
+const destination=path.join(__dirname,'dist','vorlagen');
+fs.mkdirSync(destination,{recursive:true});
+const p=GeoCore.template();
+fs.writeFileSync(path.join(destination,'projektvorlage.geolab.json'),JSON.stringify(p,null,2));
+fs.writeFileSync(path.join(destination,'demoprojekt.geolab.json'),JSON.stringify(GeoCore.demo(),null,2));
+fs.writeFileSync(path.join(destination,'leeres-projekt.geolab.json'),JSON.stringify(GeoCore.empty(),null,2));
+for(const [kind,name]of [['bodies','05-lokale-koerper.csv'],['paleo','06-palaeorelief.csv']])fs.writeFileSync(path.join(destination,name),GeoCore.exportCSV(p,kind));
+for(const [kind,name]of [['terrain','01-gelaende.csv'],['layers','02-schichten.csv'],['bores','03-bohrungen.csv'],['gis','04-geolayer.csv']])fs.writeFileSync(path.join(destination,name),GeoCore.exportCSV(p,kind));
+console.log('Generated editable JSON and CSV examples.');
+
+const fault={...p,faults:[{id:"F-01",name:"Beispielflaeche",color:"#b95149",coordinates:[[30,0,60],[30,200,60],[110,200,-100],[110,0,-100]]}]};
+fs.writeFileSync(path.join(destination,"07-stoerungsflaechen.csv"),GeoCore.exportCSV(fault,"faults"));

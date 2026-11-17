@@ -1,0 +1,280 @@
+{
+  "format": "geolab-3d",
+  "version": 1,
+  "metadata": {
+    "name": "Mein Beispielgebiet",
+    "crs": "Projektkoordinaten in Metern · bitte anpassen",
+    "heightDatum": "m (lokaler Höhenbezug)",
+    "synthetic": true
+  },
+  "terrain": {
+    "name": "Beispielgelände",
+    "x": [
+      0,
+      100,
+      200
+    ],
+    "y": [
+      0,
+      100,
+      200
+    ],
+    "z": [
+      [
+        112,
+        118,
+        115
+      ],
+      [
+        116,
+        125,
+        121
+      ],
+      [
+        111,
+        119,
+        116
+      ]
+    ],
+    "visible": true,
+    "opacity": 0.8
+  },
+  "layers": [
+    {
+      "id": "sand",
+      "name": "Sand",
+      "color": "#d5b47b",
+      "bottom": [
+        [
+          90,
+          92,
+          91
+        ],
+        [
+          91,
+          94,
+          93
+        ],
+        [
+          89,
+          92,
+          91
+        ]
+      ],
+      "visible": true,
+      "opacity": 1
+    },
+    {
+      "id": "rock",
+      "name": "Festgestein",
+      "color": "#609790",
+      "bottom": [
+        [
+          -60,
+          -60,
+          -60
+        ],
+        [
+          -60,
+          -60,
+          -60
+        ],
+        [
+          -60,
+          -60,
+          -60
+        ]
+      ],
+      "visible": true,
+      "opacity": 1
+    }
+  ],
+  "boreholes": [
+    {
+      "id": "B-01",
+      "name": "Bohrung 1",
+      "x": 100,
+      "y": 100,
+      "collar_z": 125,
+      "visible": true,
+      "intervals": [
+        {
+          "from": 0,
+          "to": 15,
+          "layer_id": "sand",
+          "lithology": "Sand"
+        },
+        {
+          "from": 15,
+          "to": 25,
+          "layer_id": "sand",
+          "body_id": "linse-1",
+          "facies": "Nicht interpretiert",
+          "lithology": "Sand"
+        },
+        {
+          "from": 25,
+          "to": 31,
+          "layer_id": "sand",
+          "lithology": "Sand"
+        },
+        {
+          "from": 31,
+          "to": 120,
+          "layer_id": "rock",
+          "lithology": "Festgestein"
+        }
+      ]
+    }
+  ],
+  "gisLayers": [
+    {
+      "id": "line-1",
+      "name": "Beispiellinie",
+      "color": "#398cbd",
+      "visible": true,
+      "opacity": 1,
+      "features": [
+        {
+          "id": "L-01",
+          "type": "LineString",
+          "coordinates": [
+            [
+              0,
+              50,
+              null
+            ],
+            [
+              100,
+              80,
+              null
+            ],
+            [
+              200,
+              100,
+              null
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "view": {
+    "yaw": 0.72,
+    "pitch": 0.46,
+    "distance": 2.05,
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "cut": 0,
+    "exaggeration": 1.4,
+    "showGrid": true,
+    "showContours": true,
+    "showBores": true,
+    "xrayBores": true
+  },
+  "bodies": [
+    {
+      "id": "linse-1",
+      "name": "Lokale Sandlinse · Formatbeispiel",
+      "facies": "Nicht interpretiert",
+      "phase": "Beispielintervall",
+      "color": "#c38a3d",
+      "x": [
+        50,
+        100,
+        150
+      ],
+      "y": [
+        50,
+        100,
+        150
+      ],
+      "top": [
+        [
+          110,
+          110,
+          110
+        ],
+        [
+          110,
+          110,
+          110
+        ],
+        [
+          110,
+          110,
+          110
+        ]
+      ],
+      "bottom": [
+        [
+          110,
+          110,
+          110
+        ],
+        [
+          110,
+          100,
+          110
+        ],
+        [
+          110,
+          110,
+          110
+        ]
+      ],
+      "visible": true,
+      "opacity": 1
+    }
+  ],
+  "paleosurfaces": [
+    {
+      "id": "paleo-1",
+      "name": "Beispiel-Grenzfläche",
+      "phase": "Beispielintervall",
+      "color": "#6c929a",
+      "x": [
+        0,
+        100,
+        200
+      ],
+      "y": [
+        0,
+        100,
+        200
+      ],
+      "z": [
+        [
+          102,
+          108,
+          105
+        ],
+        [
+          106,
+          115,
+          111
+        ],
+        [
+          101,
+          109,
+          106
+        ]
+      ],
+      "visible": true,
+      "opacity": 0.15,
+      "facies": "Nicht zugeordnet"
+    }
+  ],
+  "interpretation": {
+    "phase": "Formatbeispiel",
+    "notes": [
+      "Kleines Formatbeispiel mit frei vorgegebenen Geometrien, keine geologische Rekonstruktion."
+    ],
+    "sources": []
+  },
+  "seismicProfiles": [],
+  "faults": []
+}

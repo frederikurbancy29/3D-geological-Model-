@@ -1,0 +1,5 @@
+borehole_id;name;x;y;collar_z;from_m;to_m;layer_id;body_id;facies;lithology
+B-01;Bohrung 1;100;100;125;0;15;sand;;;Sand
+B-01;Bohrung 1;100;100;125;15;25;sand;linse-1;Nicht interpretiert;Sand
+B-01;Bohrung 1;100;100;125;25;31;sand;;;Sand
+B-01;Bohrung 1;100;100;125;31;120;rock;;;Festgestein

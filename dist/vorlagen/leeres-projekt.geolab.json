@@ -1,0 +1,39 @@
+{
+  "format": "geolab-3d",
+  "version": 1,
+  "metadata": {
+    "name": "Mein Untergrundmodell",
+    "crs": "Projektkoordinaten in Metern",
+    "heightDatum": "m (lokaler Höhenbezug)",
+    "synthetic": false
+  },
+  "terrain": null,
+  "layers": [],
+  "boreholes": [],
+  "gisLayers": [],
+  "view": {
+    "yaw": 0.72,
+    "pitch": 0.46,
+    "distance": 2.05,
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "cut": 15,
+    "exaggeration": 1.4,
+    "showGrid": true,
+    "showContours": true,
+    "showBores": true,
+    "xrayBores": true
+  },
+  "bodies": [],
+  "paleosurfaces": [],
+  "interpretation": {
+    "phase": "",
+    "notes": [],
+    "sources": []
+  },
+  "seismicProfiles": [],
+  "faults": []
+}

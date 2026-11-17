@@ -1,0 +1,117 @@
+GEOLAB 3D — GEOLOGISCHES KONZEPT UND NACHVOLLZIEHBARKEIT
+
+ZIEL
+Die Demo zeigt die Architektur eines hypothetischen fluvial-deltaischen Systems
+mit einem lokalen, proximalen Schuttstrom-Lobenkomplex am Beckenrand.
+Sie zeigt räumlich begrenzte Fazieskörper in einer Wirtsformation, statt jeden
+Sandsteinnachweis durch eine flächendeckende Sandsteinschicht zu verbinden.
+
+WISSENSCHAFTLICHE EINORDNUNG
+Die unten angegebene Literatur begründet Prozesse, typische Geometrien und
+methodische Grenzen. Sie belegt NICHT diese erfundenen Koordinaten, Abmessungen,
+Fazieszuordnungen oder Paläotopographie. Es ist ein Konzeptmodell, kein
+standortspezifisch validiertes geologisches Modell und keine Prozesssimulation.
+
+1. FLUVIALE KÖRPER
+Der fluviale Rinnengürtel ist ein begrenzter, gewundener Körper. Seine maximale
+Mächtigkeit von 24 m und seine wenigen hundert Meter Breite sind bewusst
+gewählte Demoannahmen innerhalb der großen Vielfalt bekannter Rinnenkörper.
+Ein Rinnengürtel bildet eine zeitlich integrierte Ablagerungsarchitektur ab;
+seine Breite ist nicht die Breite des zu einem Zeitpunkt aktiven Flusses.
+Eine bloße Sandsteinansprache weist keinen bestimmten Flusslauf nach. Für echte
+Daten sind etwa Korngrößenentwicklung, Sedimentgefüge, Erosionsbasen,
+Paläoströmungsindikatoren und die stratigraphische Korrelation zu prüfen.
+Grundlage: Gibling (2006), Journal of Sedimentary Research 76, 731–770.
+https://doi.org/10.2110/jsr.2006.060
+
+2. DELTAISCHE KÖRPER
+Das Konzept enthält zwei schmalere Verteilerkanäle und zwei lokale, breitere
+Mündungsbarren. Flussdominierte Deltas können durch Strömungsaufweitung und
+Sedimentablagerung im Mündungsbereich Barren ausbilden; die Strömung kann sich
+daran aufteilen. Die gewählten Körper sind geometrische Platzhalter für diese
+Architektur, nicht das Ergebnis einer hydrodynamischen Berechnung. Eine Delta-
+Zuordnung erfordert den Fazies- und Beckenrahmen eines stehenden Gewässers.
+Grundlage: Edmonds & Slingerland (2007), Journal of Geophysical Research 112.
+https://doi.org/10.1029/2006JF000574
+
+3. SCHUTTSTROMKÖRPER
+Der separate Lobenkomplex liegt am steileren Beckenrand. Er wird als sandig-
+kiesiger Debrit bezeichnet. Er ist kein beliebiger gut sortierter Sandstein:
+schlechte Sortierung, grobe Klasten und Matrixstützung gehören zu den wichtigen
+Merkmalen, die in echten Sedimentdaten geprüft werden müssen. Form und
+Position allein beweisen einen Schuttstrom ebenfalls nicht. Die Mächtigkeit
+bezeichnet einen Lobenkomplex, nicht zwingend ein einzelnes Ereignis.
+Grundlage: USGS Open-File Report 2006-1035, Kingston Range, insbesondere die
+Beschreibung proximaler Schuttstromablagerungen und ihrer Gefüge.
+https://pubs.usgs.gov/of/2006/1035/of06_1035_pamphlet.pdf
+
+4. BOHRUNGEN UND KÖRPERGRENZEN
+Die sedimentologischen Demo-Bohrungen wurden aus dem vorgegebenen Referenzmodell erzeugt.
+Zugeordnete Sandsteinintervalle treffen deshalb die jeweiligen Körper. Zwei
+Bohrungen liefern bewusst keinen entsprechenden Körpernachweis. Ein solcher
+synthetischer Konsistenztest ist keine unabhängige Validierung des Modells.
+Körperränder und Korrelationen zwischen Bohrungen sind interpretative Eingaben.
+Die Anwendung rekonstruiert keine Körper automatisch aus Bohrdaten. Eine spätere
+inverse Modellierung sollte stratigraphische Grenzen, Faziesindikatoren,
+Unsicherheiten und plausible alternative Körperkorrelationen berücksichtigen.
+Grundlage: Correlation of fluvial strata in the subsurface – a review (2020).
+https://doi.org/10.1016/j.marpetgeo.2020.104611
+
+5. PALÄORELIEF UND VERSENKUNG
+Das transparente Paläorelief ist eine vorgegebene Hypothese in heutiger
+Tiefenlage. Das heutige Gelände kann unabhängig davon angezeigt werden.
+Die Demo gibt weder ein berechnetes Ablagerungsalter noch eine absolute
+ursprüngliche Geländehöhe aus. Das Intervall A fasst Ablagerungsarchitektur
+zeitlich zusammen; es behauptet keine exakte Gleichzeitigkeit aller Körper.
+Die Differenz zwischen dem heutigen Gelände und einer vergrabenen Fläche ist
+eine heutige Überdeckung und darf nicht als reine tektonische Versenkung
+interpretiert werden. Sie umfasst nicht aufgetrennte Beiträge verschiedener
+geologischer Prozesse.
+Für eine belastbare Rückrechnung wären mindestens stratigraphische Alter,
+Lithologien und Kompaktionsannahmen, Sedimentlast, Paläowassertiefe, ein
+Bezugsniveau sowie Annahmen zu Tektonik und gegebenenfalls Meeresspiegel nötig.
+Diese Korrekturen werden in dieser Demo nicht vorgenommen.
+Methodischer Bezug: PyBacktrack 1.0 (2018), Geochemistry, Geophysics, Geosystems.
+https://doi.org/10.1029/2017GC007313
+
+6. MODELLDATEN UND AUSTAUSCH
+Die Formate sind in ANLEITUNG.txt beschrieben. Lokale Körper besitzen jeweils
+eigene X/Y-Gitter mit Ober- und Unterkante. Eine Mächtigkeit von null markiert
+einen Bereich außerhalb des Körpers. Die heutige Tiefe ist vom Paläorelief und
+von der Faziesinterpretation getrennt. Bohrprofile können body_id, facies und
+lithology mitführen. interpretation.notes und interpretation.sources speichern
+Annahmen und Quellen im exportierten Projekt.
+
+Die Darstellung interpoliert vorgegebene Gitterflächen; sie entscheidet nicht
+selbst, welche Bohrungen geologisch zusammengehören. Ein wissenschaftlich
+belastbares reales Modell muss mit unabhängigen Daten und alternativen
+Interpretationen geprüft werden.
+
+7. INTRUSION UND GESTEINSNACHWEISE
+G1 ist eine vorgegebene granitische Intrusion; G-01 und G-02 wurden daraus als
+synthetische Tiefbohrungen beprobt. Ein Gesteinsnachweis gilt am Bohrpunkt und
+bestimmt die gesamte Körperform nicht eindeutig. Die räumlichen Kontakte zu
+den Rahmenschichten sind ein Beispielszenario. Die jüngsten Deckschichten
+werden im Szenario nicht intrudiert. Eine tatsächliche Altersbeziehung muss
+mit Kontaktbeobachtungen und gegebenenfalls Geochronologie untersucht werden.
+Grundlage für diskordante granitische Kontakte als mögliches geologisches
+Verhältnis: USGS Professional Paper 1776-A, Taylor Mountains Pluton (2009).
+https://pubs.usgs.gov/pp/1776/a/
+
+8. SEISMIK UND STÖRUNGSINTERPRETATION
+Die schematischen Reflektorbilder verwenden ein einheitliches räumliches Feld
+mit vorgegebenem Versatz im tieferen Untergrund. Innerhalb des vorgegebenen
+Granitkörpers werden die dort ersetzten sedimentären Reflektoren unterdrückt.
+Das ersetzt weder eine Impedanzmodellierung noch eine Wellenfeldsimulation.
+Die rote Fläche ist eine separat schaltbare Störungsinterpretation. Ihre Lage,
+Neigung und Ausdehnung sind erfunden. Eine Störungszonenbreite oder ihre
+Durchlässigkeit wird nicht aus dem Bild bestimmt. Zeitseismik benötigt eine
+Geschwindigkeitsinformation und ein Datum zur Einordnung in die Tiefendomäne.
+Grundlage: US EPA, Seismic Reflection.
+https://www.epa.gov/environmental-geophysics/seismic-reflection
+
+9. HEUTIGE LANDSCHAFT
+Die neue Berglandschaft mit offenem Flusstal und Talstadt dient der räumlichen
+Orientierung. Sie wird nicht als Beleg für die damalige Ablagerungstopographie
+verwendet. Die absoluten Koordinaten der Untergrundkörper bleiben vorgegeben;
+Bohransatzhöhen und abgeleitete Tiefen wurden an das neue Gelände angepasst.

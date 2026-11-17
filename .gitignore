@@ -1,0 +1,13 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.log
+*.zip
+qa/
+local-data/
+private-data/
+exports/
+/dist/vorlagen/demoprojekt.geolab.json
+.env
+.env.*
+!.env.example

@@ -1,0 +1,10 @@
+﻿surface_id;name;phase;color;x;y;z
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;0;0;102
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;100;0;108
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;200;0;105
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;0;100;106
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;100;100;115
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;200;100;111
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;0;200;101
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;100;200;109
+paleo-1;Beispiel-Grenzfläche;Beispielintervall;#6c929a;200;200;106

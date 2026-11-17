@@ -1,0 +1,64 @@
+name: GeoLab 3D prüfen und veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Prüfen und Website erstellen
+    runs-on: ubuntu-latest
+    steps:
+      - name: Quellcode laden
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Node.js bereitstellen
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Python bereitstellen
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Daten, Geometrie und Import prüfen
+        run: node --test core.test.cjs sedimentary.test.cjs integration.test.cjs
+      - name: Website und Vorlagen erstellen
+        run: |
+          python build.py
+          node examples.cjs
+      - name: Website zur Veröffentlichung bereitstellen
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: GitHub Pages veröffentlichen
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publish.outputs.page_url }}
+    steps:
+      - name: GitHub Pages konfigurieren
+        uses: actions/configure-pages@v5
+      - name: Website veröffentlichen
+        id: publish
+        uses: actions/deploy-pages@v5

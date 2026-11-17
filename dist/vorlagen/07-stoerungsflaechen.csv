@@ -1,0 +1,5 @@
+﻿fault_id;name;point_order;x;y;z;color
+F-01;Beispielflaeche;1;30;0;60;#b95149
+F-01;Beispielflaeche;2;30;200;60;#b95149
+F-01;Beispielflaeche;3;110;200;-100;#b95149
+F-01;Beispielflaeche;4;110;0;-100;#b95149

@@ -1,0 +1,211 @@
+GEOLAB 3D — LOKALE DEMO
+======================
+
+STARTEN
+Die Datei index.html in einem aktuellen Browser öffnen. Installation, Internet,
+ein Konto oder zusätzliche Bibliotheken sind nicht erforderlich. WebGL muss
+im Browser verfügbar sein. Alle Dateien werden im Browser verarbeitet.
+
+Die Anwendung enthält ein erfundenes Gebiet von 10.000 x 8.000 m, heutiges Gelände,
+ein Paläorelief, sechs lokale Fazieskörper, eine Granitintrusion, vierzehn Bohrungen, sieben
+Rahmenschichten, zwei Seismikprofile, eine Störungsinterpretation und mehrere
+Geolayer mit einer synthetischen Talstadt. Koordinaten,
+Höhen und Materialien sind fiktiv und keine Standortdaten.
+
+BEDIENUNG
+Ziehen: Modell drehen. Umschalt + Ziehen oder rechte Maustaste: verschieben.
+Mausrad: zoomen. Touch: ein Finger dreht, zwei Finger zoomen und verschieben.
+Tastatur im Modell: Pfeile drehen, + / - zoomen, F passt das Modell ein.
+Die Häkchen schalten Gelände, einzelne Schichten, einzelne Bohrungen und
+weitere Geolayer. Die Gelände-Deckkraft ist verstellbar.
+Ein Klick auf eine Bohrung oder den Modellkörper zeigt Objektinformationen.
+Schnitt von Süden: entfernt den vorderen Teil des Blocks samt dortigen Objekten.
+Höhenüberhöhung 1x: gleicher Maßstab in Höhe und horizontaler Ausdehnung.
+Messwerte sind immer tatsächliche Datenwerte, unabhängig von der Überhöhung.
+
+DEMODATEN ERSETZEN
+1. Daten verwalten > Alle Modelldaten löschen. Der leere Stand wird lokal
+   gespeichert; die Demo wird beim Neuladen nicht automatisch wieder eingesetzt.
+2. Im Ordner vorlagen stehen zusammenpassende kleine Beispiele. Ersetze die
+   Werte und importiere in dieser Reihenfolge:
+   01-gelaende.csv, 02-schichten.csv, 05-lokale-koerper.csv,
+   06-palaeorelief.csv, 03-bohrungen.csv, 04-geolayer.csv.
+   Alternativ eine einzige vollständige GeoLab-Projektdatei als JSON öffnen.
+3. Unter Projekteinstellungen Namen, Koordinatenbezug und Höhenbezug anpassen.
+4. Projekt speichern lädt eine JSON-Datei mit allen Daten und der Ansicht.
+   Diese Datei ist deine dauerhafte Sicherung und lässt sich wieder importieren.
+
+Direkt in der Anwendung heruntergeladene Vorlagen enthalten, soweit vorhanden,
+die aktuellen Modelldaten der gewählten Kategorie. So kannst du vorhandene
+Daten verändern. Nach dem Löschen erhältst du kleine Beispielvorlagen; bei
+Schichten wird ein bereits importiertes Gelände berücksichtigt. Für einen
+zusätzlichen Geolayer über '+ Hinzufügen' eine neue eindeutige layer_id verwenden.
+
+KOORDINATEN UND HÖHEN
+X und Y sind projizierte Koordinaten in Metern, beispielsweise UTM-Koordinaten.
+Z ist eine absolute Höhe im von dir angegebenen Bezug (z. B. m NHN).
+Keine automatische Projektion, Georeferenzierung oder Höhentransformation.
+Längen- und Breitengrade dürfen nicht als X/Y in Metern eingesetzt werden.
+Ein angegebener EPSG-Code dokumentiert lediglich den Bezug der Eingabewerte.
+Eine lokale Lage und ein lokaler Höhenbezug sind ebenfalls möglich.
+Bohrtiefen from_m/to_m sind positive Tiefen ab collar_z (Bohransatz).
+Sohlhöhe = collar_z - to_m. Tiefe unter Gelände = Gelände-Z - Objekt-Z.
+Geländehöhen zwischen Gitterknoten werden bilinear interpoliert; die Darstellung
+verwendet Dreiecke als geometrische Annäherung der Flächen.
+
+CSV-FORMATE
+UTF-8; erste Zeile enthält die Spaltennamen. Semikolon oder Komma als
+Trennzeichen. Dezimalkomma ist nur bei Semikolon als Trennzeichen sinnvoll.
+Keine Tausendertrennzeichen in Zahlen. Texte mit Semikolon in Anführungszeichen
+setzen. IDs dürfen frei gewählt werden, müssen pro Kategorie eindeutig sein.
+Farben als sechsstelligen Hexwert angeben, zum Beispiel #c28159.
+
+Gelände:
+  x;y;z
+Jede Kombination von X und Y muss genau einmal vorkommen. Mindestens ein
+2 x 2 Gitter. Regelmäßige oder unregelmäßige Achsabstände sind möglich, aber
+keine fehlenden Gitterknoten. Punktwolken oder verstreute Messpunkte müssen
+zuvor auf ein vollständiges rechteckiges Gitter gebracht werden.
+
+Schichten:
+  layer_id;layer_name;color;x;y;bottom_z
+Eine Zeile pro Gitterknoten und Schicht. Jede Schicht verwendet exakt die
+X/Y-Knoten des Höhenmodells. bottom_z bezeichnet die absolute Unterkante.
+Die erste Schicht beginnt am Gelände, jede weitere an der Unterkante der
+vorigen Schicht. Die Reihenfolge der erstmals auftretenden layer_id im CSV
+bestimmt die Reihenfolge von oben nach unten. Grenzen dürfen sich nicht kreuzen.
+Eine Mächtigkeit von null ist möglich. Überkippte Falten und komplexe Störungen
+werden von diesem Modell aus übereinanderliegenden Grenzflächen nicht abgebildet.
+
+Bohrungen:
+  borehole_id;name;x;y;collar_z;from_m;to_m;layer_id;body_id;facies;lithology
+Eine Zeile pro Intervall. Ansatzdaten müssen für alle Zeilen derselben Bohrung
+übereinstimmen. Intervalle dürfen sich nicht überschneiden. Ihre layer_id muss
+zu einer importierten Schicht passen, wenn geologische Schichten vorhanden sind.
+Die letzten drei Spalten body_id, facies und lithology sind optional. body_id
+ordnet ein Intervall einem zuvor importierten lokalen Körper zu. Die
+Körpergeometrien werden nicht automatisch aus den Bohrprofilen berechnet.
+Bohrprofile und Flächen sind getrennte Eingabedaten und müssen fachlich
+miteinander abgeglichen werden.
+
+Lokale Ablagerungskörper:
+  body_id;name;facies;body_type;phase;color;x;y;top_z;bottom_z
+body_type ist sedimentary oder intrusion. Die Spalte ist optional; ohne Angabe
+wird der Körper als sedimentär behandelt. Jeder Körper hat ein eigenes lokales
+vollständiges rechteckiges X/Y-Gitter.
+Es muss nicht dem Raster des Geländes entsprechen. top_z und bottom_z sind
+absolute Höhen; top_z darf nicht unter bottom_z liegen. Eine Mächtigkeit von
+null markiert außerhalb des Körpers liegende Bereiche im lokalen Gitter.
+Mindestens ein Gitterknoten muss eine positive Mächtigkeit besitzen.
+Fazies und Phase sind interpretative Angaben; die Anwendung prüft diese nicht
+geologisch. Für komplexe Störungen oder überkippte Körper wären andere
+Geometrieformate erforderlich.
+
+Paläorelief-Flächen:
+  surface_id;name;phase;color;x;y;z
+Eine Fläche besitzt ein eigenes vollständiges rechteckiges X/Y-Gitter.
+Z ist die heutige Tiefenlage der interpretierten früheren Ablagerungsfläche,
+nicht eine berechnete ursprüngliche Höhenlage. Es erfolgt kein Backstripping.
+
+Weitere Geolayer:
+  layer_id;layer_name;geometry;feature_id;vertex_order;x;y;z;color
+geometry: Point, LineString oder Polygon. Ein Punkt hat genau eine Zeile.
+Für Linien und Polygone bestimmt vertex_order die Reihenfolge der Stützpunkte.
+Eine leere Z-Zelle legt den Stützpunkt auf das Gelände. Alle solchen Punkte
+müssen innerhalb des Höhenmodells liegen. Außerhalb eine absolute Z-Höhe angeben.
+Eine neue layer_id erzeugt einen eigenen schaltbaren Layer. Unterstützt werden
+einfache Polygone ohne Löcher. Flächenfarben werden transparent dargestellt,
+wenn die Deckkraft im JSON unter 1 eingestellt ist. Objekte werden geringfügig
+über dem Gelände gezeichnet, um Darstellungsflimmern zu vermeiden.
+
+PROJEKTDATEI (JSON)
+format: "geolab-3d", version: 1.
+metadata: name, crs, heightDatum, synthetic.
+terrain: name, x, y, z, visible, opacity. z ist zeilenweise nach Y organisiert,
+innerhalb jeder Zeile nach X; x und y sind streng aufsteigend.
+layers: Liste mit id, name, color, bottom, visible, opacity.
+bottom hat dieselbe Zeilen-/Spaltenanordnung wie terrain.z.
+bodies: Liste mit id, name, facies, phase, color, x, y, top, bottom, visible,
+opacity. top und bottom sind Höhenmatrizen auf den eigenen X/Y-Achsen.
+paleosurfaces: Liste mit id, name, phase, color, x, y, z, visible, opacity.
+interpretation: phase, notes (Liste von Annahmen) und sources
+(Liste mit title, url und supports).
+boreholes: Liste mit id, name, x, y, collar_z, visible und intervals.
+intervals enthält from, to und layer_id sowie optional body_id, facies und
+lithology. Bei einem Intrusionsnachweis kann layer_id auf die Körper-ID zeigen.
+gisLayers: Liste mit id, name, color, visible, opacity und features.
+Jedes feature enthält id, type und coordinates; bei Point [x,y,z], bei Linien
+und Polygonen eine Liste dieser Koordinaten. null als Z legt auf das Gelände.
+view: Kamera, Schnittposition, Höhenüberhöhung und weitere Sichtbarkeiten.
+
+SPEICHERUNG UND GRENZEN
+Automatische lokale Speicherung erfolgt, soweit der Browser sie erlaubt.
+Bei großen Projekten kann die Browserablage voll werden. Die Anwendung zeigt
+dies an; sichere dann über Projekt speichern. Exportierte Dateien werden durch
+das Leeren des Modells nicht gelöscht. Die Anwendung überträgt keine Daten.
+
+Diese Version unterstützt JSON und die beschriebenen CSV-Formate. GeoTIFF,
+Shapefile, LAS/LAZ, DXF und gewöhnliches WGS84-GeoJSON werden nicht direkt gelesen.
+Keine Basiskarte oder Orthofotos und keine automatische Ableitung der Geologie
+aus Bohrungen. Keine Grundwasser-, Wärme- oder geomechanische Prozesssimulation.
+Transparente Flächen sind eine visuelle Annäherung und können sich bei
+Überlagerungen abhängig vom Blickwinkel unterschiedlich darstellen.
+
+Die Leistung hängt von Gerät und Browser ab. Die Eingabeprüfung begrenzt
+Geländegitter auf 25.000 Punkte, alle Schichtgitter zusammen auf 250.000 Punkte,
+Schichten auf 100, Bohrungen auf 2.000 und Geolayer auf 500. Diese Obergrenzen
+sind keine Zusage flüssiger Darstellung bei gleichzeitig maximalen Datenmengen.
+Lokale Körper und Paläoflächen sind zusammen auf 250.000 Gitterpunkte begrenzt;
+maximal 100 Körper und 20 Paläoflächen. Für größere Daten werden später
+räumliche Kachelung und Detailstufen benötigt.
+
+QUELLCODE
+Der übergeordnete Ordner enthält den bearbeitbaren Quellcode. build.py baut
+die vollständige dist/index.html. core.test.cjs prüft Import, Geometrie und
+Ansichtsdaten. Für die Benutzung ist nur dist/index.html erforderlich.
+
+GEOLOGISCHE GRUNDLAGEN
+Siehe GEOLOGISCHES_KONZEPT.txt und in der Anwendung den gleichnamigen
+Quellendialog. Die Demo belegt keine reale geologische Korrelation.
+
+SEISMIK UND STÖRUNGEN
+Die beiden Beispielprofile verwenden schematische Reflektorbilder in der
+Tiefendomäne. Sie sind weder Messungen noch eine Wellenfeldsimulation. Sie
+verwenden dasselbe räumliche Reflektorfeld. Eine vorgegebene ältere Abschiebung
+versetzt die tieferen Reflektoren; die jüngeren Fazieskörper sind unversetzt.
+Das ist eine Szenarioannahme, kein automatischer Störungsnachweis.
+
+Unter Seismik & Struktur > + Profil ein PNG/JPG-Bild wählen und Profilname,
+Start-/Endkoordinaten sowie obere und untere absolute Z-Höhe angeben. Die linke
+Bildkante entspricht dem Start, die rechte dem Ende. Die obere Bildkante
+entspricht der oberen Z-Höhe. Die Bildachse muss linear in Metern kalibriert
+sein. Das Datenbild ohne äußere Skalen/Beschriftungsränder verwenden. Für die
+Anzeige werden maximal 2.048 Pixel Kantenlänge gespeichert. Profilbilder werden
+in der JSON-Projektdatei eingebettet. Mehrfach geknickte Profiltrassen sind im
+JSON als trace mit mehreren X/Y-Paaren möglich.
+
+Zeitprofile in Millisekunden TWT werden nicht als Tiefe interpretiert. Sie
+benötigen eine fachliche Zeit-Tiefen-Konvertierung mit Geschwindigkeitsmodell
+und einem passenden Datum. Die Demo liest keine SEG-Y-Rohdateien direkt.
+
+Störungs-CSV:
+  fault_id;name;point_order;x;y;z;color
+Die geordneten Eckpunkte beschreiben eine ebene interpretierte Fläche in 3D.
+Mehrere Teilflächen können getrennt importiert werden. Dies ist eine
+Mittelfläche; die Ausdehnung einer Störungszone wird daraus nicht bestimmt.
+
+GRANIT UND RAHMENSCHICHTEN
+G1 ist ein separater Intrusionskörper mit zwei synthetischen Granitnachweisen
+in G-01 und G-02. Die Kontakte sind vorgegeben. Die Intrusionsform wird nicht
+aus zwei Bohrungen eindeutig ermittelt. Einzelne Rahmenschichten lassen sich
+ein-/ausblenden und ihre Deckkraft verändern. Der Schnittregler legt auch
+Querschnitte der Körper frei. Undurchsichtige Rahmenschichten können innen
+liegende Körper verdecken; dann Deckkraft reduzieren oder Schichten ausblenden.
+
+STADT UND GELÄNDE
+Bergkette, Flusstal und Talkessel sind synthetischer heutiger Orientierungskontext.
+Die Talstadt besteht aus eigenen Gebäude-, Straßen- und Parklayern. Sie lassen
+sich wie alle Geolayer schalten. Gebäude sind Polygonobjekte mit optionalem
+height_m und roof_height_m. Diese Spalten sowie roof_color können auch in der
+Geolayer-CSV mitgeführt werden. Das Relief sagt nichts über einen bestimmten
+Paläofluss oder eine bestimmte Versenkungsursache aus.
