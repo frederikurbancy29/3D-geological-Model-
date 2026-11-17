@@ -10,6 +10,14 @@ als Rückfallstand erhalten. Das Leeren des aktiven Modells leert auch dessen
 Datenablage; andere Projekte bleiben bestehen.
 
 LAYER UND BEARBEITUNG
+Mit + Gruppe erstellen im linken Layerbereich eigene Gruppen anlegen. Leere
+Gruppen werden ebenfalls gespeichert. Über die drei Punkte an einer Gruppe
+kannst du sie umbenennen und mehrere Layer per Häkchen zuordnen. Über den Pfeil
+an einem Layer oder die Gruppenauswahl rechts verschiebst du einzelne Layer.
+Beim Entfernen einer Gruppe werden ihre Layer in Unsortierte Layer gesammelt;
+die Modelldaten bleiben erhalten. Ein- und ausgeklappte Gruppen werden mit dem
+Projekt gespeichert.
+
 Links stehen gruppierte, einzeln schaltbare Layer. Rechts lassen sich Name,
 Gruppe, Farbe, Deckkraft, Datenart, Herkunft und Lageunsicherheit ändern. Eine
 Bearbeitungssperre schützt GIS-Geometrien und Attribute. Entfernte Layer stehen

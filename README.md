@@ -16,7 +16,9 @@ Die veröffentlichte Website funktioniert ohne Installation. Alternativ die Date
 - Bohrprofile, Höhen und Tiefen untersuchen.
 - Eigene tiefenkonvertierte Seismikbilder als PNG/JPG georeferenzieren.
 - Projekte neu erstellen, kopieren, archivieren und als Datei sichern; getrennte Speicherung in IndexedDB.
-- Layer gruppieren, sperren, einfärben und entfernen; entfernte Layer aus der Datenablage wieder einladen.
+- Eigene Gruppen direkt im Layerbereich erstellen, umbenennen und verwalten; auch leere Gruppen bleiben im Projekt erhalten.
+- Layer über den Pfeil am Eintrag, die Gruppenauswahl rechts oder die Gruppenauswahl mit Häkchen zuordnen. Gruppen lassen sich einklappen und entfernen; ihre Layer bleiben erhalten.
+- Layer sperren, einfärben und entfernen; entfernte Layer aus der Datenablage wieder einladen.
 - GeoJSON mit Originaldatei und Herkunft importieren; getrennte Layer- und Objektattribute bearbeiten.
 - Attributtabelle filtern, sortieren, Auswahl bearbeiten und als CSV exportieren; Objekte per Rechteck auswählen.
 - GIS-Stützpunkte numerisch bearbeiten, Geometrien um ein angegebenes Zentrum drehen und verschieben; in 2D mit Fangtoleranz zeichnen.
@@ -76,7 +78,7 @@ node examples.cjs
 
 `build.py` verbindet die Quelldateien zu einer eigenständig nutzbaren HTML-Datei. `examples.cjs` erstellt die austauschbaren Datenvorlagen.
 
-Die 41 automatisierten Prüfungen umfassen unabhängige PROJ-/GeographicLib-Referenzwerte, analytisch bekannte Strecken, Flächen, Winkel und Volumen, verbotene Datums-/Höhenwechsel, Polygonfehler, Fangtoleranzen, Projekttrennung, Originaldaten und die vorhandene geologische Demo. Browserprüfungen ergänzen Projektwechsel, Speichern/Wiederöffnen, Attributbearbeitung, numerische Drehung, Rückgängig und Wiederherstellung entfernter Layer.
+Die 48 automatisierten Prüfungen umfassen unabhängige PROJ-/GeographicLib-Referenzwerte, analytisch bekannte Strecken, Flächen, Winkel und Volumen, verbotene Datums-/Höhenwechsel, Polygonfehler, Fangtoleranzen, Projekttrennung, Originaldaten und die vorhandene geologische Demo. Browserprüfungen ergänzen Projektwechsel, Speichern/Wiederöffnen, Attributbearbeitung, numerische Drehung, Rückgängig und Wiederherstellung entfernter Layer.
 
 ### Grundlagen der Koordinatenberechnungen
 

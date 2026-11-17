@@ -18,15 +18,26 @@
   const kinds={terrain:'Höhenmodell',layers:'Rahmenschicht',bodies:'Geologischer Körper',paleosurfaces:'Paläorelief',boreholes:'Bohrung',gisLayers:'Geoinformationslayer',seismicProfiles:'Seismikprofil',faults:'Störungsfläche'};
   function entries(p){const out=[];if(p.terrain)out.push({key:'terrain:terrain',type:'terrain',id:'terrain',object:p.terrain});for(const type of Object.keys(kinds).filter(k=>k!=='terrain'))for(const object of p[type]||[])out.push({key:type+':'+object.id,type,id:object.id,object});return out;}
   const find=(p,key)=>entries(p).find(e=>e.key===key);
+  const groupName=value=>{if(typeof value!=='string'||!value.trim()||value.trim().length>100)fail('Gruppenname: bitte 1 bis 100 Zeichen eingeben.');return value.trim();};
+  const sameName=(a,b)=>a.toLocaleLowerCase('de')===b.toLocaleLowerCase('de');
+  const groupObjects=p=>[...entries(p),...(p.workspace.detached||[])].map(e=>e.object);
+  function ensureGroup(p,name){name=groupName(name);let g=p.workspace.groups.find(g=>sameName(g.name,name));if(!g){if(p.workspace.groups.length>=500)fail('Maximal 500 Gruppen pro Projekt.');g={id:uuid(),name,collapsed:false};p.workspace.groups.push(g);}return g;}
+  function createGroup(p,name){name=groupName(name);if(p.workspace.groups.some(g=>sameName(g.name,name)))fail('Eine Gruppe mit diesem Namen ist bereits vorhanden.');return ensureGroup(p,name);}
+  function renameGroup(p,id,name){name=groupName(name);const g=p.workspace.groups.find(g=>g.id===id);if(!g)fail('Gruppe nicht gefunden.');if(p.workspace.groups.some(g=>g.id!==id&&sameName(g.name,name)))fail('Eine Gruppe mit diesem Namen ist bereits vorhanden.');for(const o of groupObjects(p))if(o.workspace?.groupId===id){o.workspace.group=name;}g.name=name;return g;}
+  function moveLayerToGroup(p,key,id){const e=find(p,key),g=p.workspace.groups.find(g=>g.id===id);if(!e||!g)fail('Layer oder Zielgruppe nicht gefunden.');e.object.workspace.groupId=g.id;e.object.workspace.group=g.name;}
+  function assignGroupMembers(p,id,keys){const g=p.workspace.groups.find(g=>g.id===id);if(!g)fail('Gruppe nicht gefunden.');if(!Array.isArray(keys)||keys.some(k=>!find(p,k)))fail('Die Layerauswahl enthält einen unbekannten Layer.');const selected=new Set(keys),removed=entries(p).filter(e=>e.object.workspace.groupId===id&&!selected.has(e.key));const fallback=removed.length?ensureGroup(p,sameName(g.name,'Unsortierte Layer')?'Modellinhalt':'Unsortierte Layer'):null;for(const e of entries(p)){if(selected.has(e.key))moveLayerToGroup(p,e.key,id);else if(removed.some(r=>r.key===e.key))moveLayerToGroup(p,e.key,fallback.id);}}
+  function removeGroup(p,id){const g=p.workspace.groups.find(g=>g.id===id);if(!g)fail('Gruppe nicht gefunden.');const members=groupObjects(p).filter(o=>o.workspace?.groupId===id),fallback=members.length?ensureGroup(p,sameName(g.name,'Unsortierte Layer')?'Modellinhalt':'Unsortierte Layer'):null;for(const o of members){o.workspace.groupId=fallback.id;o.workspace.group=fallback.name;}p.workspace.groups=p.workspace.groups.filter(g=>g.id!==id);}
   function normalize(input){
     const p=C.validate(input);
     p.reference=p.reference||{horizontal:p.metadata.synthetic&&p.metadata.crs.includes('25832')?'EPSG:25832':'LOCAL',vertical:'LOCAL',confirmed:false,epoch:'',note:p.metadata.synthetic?'Fiktive Demo-Lage und Höhen.':'Raumbezug der Altdatei noch nicht bestätigt.'};
     if(!systems[p.reference.horizontal]?.projected)fail('Das Projekt benötigt einen unterstützten metrischen Lagebezug. Geografische Koordinaten beim Import umrechnen.');
     if(!verticals[p.reference.vertical])fail('Unbekannter Höhenbezug.');
     p.workspace=p.workspace||{};p.workspace.schema=2;p.workspace.projectId=p.workspace.projectId||uuid();
-    for(const key of ['measurements','history','sources','detached','bookmarks'])if(!Array.isArray(p.workspace[key]))p.workspace[key]=[];
+    for(const key of ['measurements','history','sources','detached','bookmarks','groups'])if(!Array.isArray(p.workspace[key]))p.workspace[key]=[];
+    const groupIds=new Set(),groupNames=new Set();for(const g of p.workspace.groups){g.name=groupName(g.name);if(typeof g.id!=='string'||!g.id||groupIds.has(g.id)||groupNames.has(g.name.toLocaleLowerCase('de')))fail('Gruppen benötigen eindeutige IDs und Namen.');groupIds.add(g.id);groupNames.add(g.name.toLocaleLowerCase('de'));g.collapsed=g.collapsed===true;}if(p.workspace.groups.length>500)fail('Maximal 500 Gruppen pro Projekt.');
     p.workspace.revision=Number.isInteger(p.workspace.revision)?p.workspace.revision:0;
     for(const e of entries(p)){const o=e.object;o.properties=o.properties||{};o.workspace=o.workspace||{};o.workspace.group=o.workspace.group||kinds[e.type];o.workspace.status=o.workspace.status||(p.metadata.synthetic?'synthetisch':e.type==='boreholes'?'beobachtet':'interpretiert');o.workspace.source=o.workspace.source||(p.metadata.synthetic?'Erfundener Demonstrationsdatensatz':'');o.workspace.locked=o.workspace.locked===true;if(o.workspace.uncertainty_m!=null&&(!Number.isFinite(o.workspace.uncertainty_m)||o.workspace.uncertainty_m<0))fail('Lageunsicherheit muss eine nichtnegative Zahl sein.');if(e.type==='gisLayers'){for(const f of o.features){if(f.type==='Polygon')simpleRing(f.coordinates);for(const field of o.fields||[]){const v=f.properties?.[field.name];if(v!=null&&typeof v!==field.type)fail('Attribut '+field.name+': Datentyp passt nicht zur Felddefinition.');}}}}
+    for(const o of groupObjects(p)){o.workspace=o.workspace||{};const g=p.workspace.groups.find(g=>g.id===o.workspace.groupId)||ensureGroup(p,o.workspace.group||'Unsortierte Layer');o.workspace.group=g.name;o.workspace.groupId=g.id;}
     return p;
   }
   function transform(c,from,to,verticalFrom,verticalTo){
@@ -92,5 +103,5 @@
     return rows;
   }
   function section(p,a,b,n=201){if(distance(a,b)===0)fail('Schnitt benötigt zwei verschiedene Punkte.');return Array.from({length:n},(_,i)=>{const t=i/(n-1),x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t;return {distance:distance(a,b)*t,x,y,terrain:C.terrainAt(p,x,y),layers:p.layers.map(l=>C.sample(p.terrain,l.bottom,x,y)),bodies:(p.bodies||[]).map(l=>({id:l.id,top:C.sample(l,l.top,x,y),bottom:C.sample(l,l.bottom,x,y)}))};});}
-  globalThis.GeoWorkspace={uuid,systems,verticals,kinds,normalize,entries,find,transform,geographic,distance,area2D,triangleArea,simpleRing,measure,volume,layerVolume,featurePoints,featureColor,intersectsExtent,rotateFeature,snap,detach,restore,importGeoJSON,quality,section};
+  globalThis.GeoWorkspace={uuid,systems,verticals,kinds,normalize,entries,find,createGroup,renameGroup,moveLayerToGroup,assignGroupMembers,removeGroup,transform,geographic,distance,area2D,triangleArea,simpleRing,measure,volume,layerVolume,featurePoints,featureColor,intersectsExtent,rotateFeature,snap,detach,restore,importGeoJSON,quality,section};
 })();
