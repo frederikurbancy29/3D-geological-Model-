@@ -36,6 +36,7 @@
   },
   "seismicProfiles": [],
   "faults": [],
+  "rasterLayers": [],
   "reference": {
     "horizontal": "LOCAL",
     "vertical": "LOCAL",
@@ -45,12 +46,14 @@
   },
   "workspace": {
     "schema": 2,
-    "projectId": "5ef9a8de-14e9-4a2e-8daa-52d547ab8548",
+    "projectId": "858c9ec8-027a-4a1a-8d19-975201169f57",
     "measurements": [],
     "history": [],
     "sources": [],
     "detached": [],
     "bookmarks": [],
+    "groups": [],
+    "tools": [],
     "revision": 0
   }
 }

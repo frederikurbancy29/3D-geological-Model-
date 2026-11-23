@@ -33,7 +33,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Daten, Geometrie und Import prüfen
-        run: node --test core.test.cjs sedimentary.test.cjs integration.test.cjs workspace.test.cjs
+        run: node --test core.test.cjs sedimentary.test.cjs integration.test.cjs workspace.test.cjs field.test.cjs
       - name: Website und Vorlagen erstellen
         run: |
           python build.py

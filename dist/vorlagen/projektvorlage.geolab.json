@@ -43,7 +43,8 @@
       "group": "Höhenmodell",
       "status": "synthetisch",
       "source": "Erfundener Demonstrationsdatensatz",
-      "locked": false
+      "locked": false,
+      "groupId": "6ffc07dd-2305-4d17-b6ec-e13af3713fbb"
     }
   },
   "layers": [
@@ -75,7 +76,8 @@
         "group": "Rahmenschicht",
         "status": "synthetisch",
         "source": "Erfundener Demonstrationsdatensatz",
-        "locked": false
+        "locked": false,
+        "groupId": "98ec0490-a076-4f25-8528-0f3e26372412"
       }
     },
     {
@@ -106,7 +108,8 @@
         "group": "Rahmenschicht",
         "status": "synthetisch",
         "source": "Erfundener Demonstrationsdatensatz",
-        "locked": false
+        "locked": false,
+        "groupId": "98ec0490-a076-4f25-8528-0f3e26372412"
       }
     }
   ],
@@ -123,7 +126,8 @@
           "from": 0,
           "to": 15,
           "layer_id": "sand",
-          "lithology": "Sand"
+          "lithology": "Sand",
+          "interval_id": "B-01:0"
         },
         {
           "from": 15,
@@ -131,28 +135,35 @@
           "layer_id": "sand",
           "body_id": "linse-1",
           "facies": "Nicht interpretiert",
-          "lithology": "Sand"
+          "lithology": "Sand",
+          "interval_id": "B-01:1"
         },
         {
           "from": 25,
           "to": 31,
           "layer_id": "sand",
-          "lithology": "Sand"
+          "lithology": "Sand",
+          "interval_id": "B-01:2"
         },
         {
           "from": 31,
           "to": 120,
           "layer_id": "rock",
-          "lithology": "Festgestein"
+          "lithology": "Festgestein",
+          "interval_id": "B-01:3"
         }
       ],
+      "trajectory": "vertical",
+      "role": "unclassified",
       "properties": {},
       "workspace": {
         "group": "Bohrung",
         "status": "synthetisch",
         "source": "Erfundener Demonstrationsdatensatz",
-        "locked": false
-      }
+        "locked": false,
+        "groupId": "0e778fc4-0985-4332-bcc3-3b1f1be15bbc"
+      },
+      "end_depth": 120
     }
   ],
   "gisLayers": [
@@ -190,7 +201,8 @@
         "group": "Geoinformationslayer",
         "status": "synthetisch",
         "source": "Erfundener Demonstrationsdatensatz",
-        "locked": false
+        "locked": false,
+        "groupId": "cfeddd5f-8213-4f7c-939d-aad79903cd69"
       }
     }
   ],
@@ -268,7 +280,8 @@
         "group": "Geologischer Körper",
         "status": "synthetisch",
         "source": "Erfundener Demonstrationsdatensatz",
-        "locked": false
+        "locked": false,
+        "groupId": "44501750-113c-4fae-8389-8df854fc77ff"
       }
     }
   ],
@@ -313,7 +326,8 @@
         "group": "Paläorelief",
         "status": "synthetisch",
         "source": "Erfundener Demonstrationsdatensatz",
-        "locked": false
+        "locked": false,
+        "groupId": "0902a6d2-0e2b-488c-8d5e-041d0565c3b8"
       }
     }
   ],
@@ -326,6 +340,7 @@
   },
   "seismicProfiles": [],
   "faults": [],
+  "rasterLayers": [],
   "reference": {
     "horizontal": "LOCAL",
     "vertical": "LOCAL",
@@ -335,12 +350,45 @@
   },
   "workspace": {
     "schema": 2,
-    "projectId": "a61c22b5-9ad2-411b-8b38-45cbccd932e3",
+    "projectId": "1ebcb2b8-00c0-4988-b76d-74df3ba9a188",
     "measurements": [],
     "history": [],
     "sources": [],
     "detached": [],
     "bookmarks": [],
+    "groups": [
+      {
+        "id": "6ffc07dd-2305-4d17-b6ec-e13af3713fbb",
+        "name": "Höhenmodell",
+        "collapsed": false
+      },
+      {
+        "id": "98ec0490-a076-4f25-8528-0f3e26372412",
+        "name": "Rahmenschicht",
+        "collapsed": false
+      },
+      {
+        "id": "44501750-113c-4fae-8389-8df854fc77ff",
+        "name": "Geologischer Körper",
+        "collapsed": false
+      },
+      {
+        "id": "0902a6d2-0e2b-488c-8d5e-041d0565c3b8",
+        "name": "Paläorelief",
+        "collapsed": false
+      },
+      {
+        "id": "0e778fc4-0985-4332-bcc3-3b1f1be15bbc",
+        "name": "Bohrung",
+        "collapsed": false
+      },
+      {
+        "id": "cfeddd5f-8213-4f7c-939d-aad79903cd69",
+        "name": "Geoinformationslayer",
+        "collapsed": false
+      }
+    ],
+    "tools": [],
     "revision": 0
   }
 }

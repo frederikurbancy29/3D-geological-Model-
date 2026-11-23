@@ -1,0 +1,5 @@
+"borehole_id";"from_m";"to_m";"lithology";"layer_id";"body_id"
+"IMPORT-01";"0";"15";"Sand";"sand";""
+"IMPORT-01";"15";"25";"Sand";"sand";"linse-1"
+"IMPORT-01";"25";"31";"Sand";"sand";""
+"IMPORT-01";"31";"120";"Festgestein";"rock";""

@@ -15,7 +15,7 @@
   proj4.defs('EPSG:4258','+proj=longlat +ellps=GRS80 +no_defs');
   for(const z of [32,33])proj4.defs('EPSG:258'+z,'+proj=utm +zone='+z+' +ellps=GRS80 +units=m +no_defs');
   const verticals={LOCAL:'Lokaler / noch offener Höhenbezug','EPSG:7837':'DHHN2016 · m NHN',ELLIPSOIDAL:'Ellipsoidische Höhe (zum Lagedatum)'};
-  const kinds={terrain:'Höhenmodell',layers:'Rahmenschicht',bodies:'Geologischer Körper',paleosurfaces:'Paläorelief',boreholes:'Bohrung',gisLayers:'Geoinformationslayer',seismicProfiles:'Seismikprofil',faults:'Störungsfläche'};
+  const kinds={terrain:'Höhenmodell',layers:'Rahmenschicht',bodies:'Geologischer Körper',paleosurfaces:'Paläorelief',boreholes:'Bohrung',gisLayers:'Geoinformationslayer',seismicProfiles:'Seismikprofil',faults:'Störungsfläche',rasterLayers:'2D-Messraster'};
   function entries(p){const out=[];if(p.terrain)out.push({key:'terrain:terrain',type:'terrain',id:'terrain',object:p.terrain});for(const type of Object.keys(kinds).filter(k=>k!=='terrain'))for(const object of p[type]||[])out.push({key:type+':'+object.id,type,id:object.id,object});return out;}
   const find=(p,key)=>entries(p).find(e=>e.key===key);
   const groupName=value=>{if(typeof value!=='string'||!value.trim()||value.trim().length>100)fail('Gruppenname: bitte 1 bis 100 Zeichen eingeben.');return value.trim();};
@@ -33,11 +33,13 @@
     if(!systems[p.reference.horizontal]?.projected)fail('Das Projekt benötigt einen unterstützten metrischen Lagebezug. Geografische Koordinaten beim Import umrechnen.');
     if(!verticals[p.reference.vertical])fail('Unbekannter Höhenbezug.');
     p.workspace=p.workspace||{};p.workspace.schema=2;p.workspace.projectId=p.workspace.projectId||uuid();
-    for(const key of ['measurements','history','sources','detached','bookmarks','groups'])if(!Array.isArray(p.workspace[key]))p.workspace[key]=[];
+    for(const key of ['measurements','history','sources','detached','bookmarks','groups','tools'])if(!Array.isArray(p.workspace[key]))p.workspace[key]=[];
     const groupIds=new Set(),groupNames=new Set();for(const g of p.workspace.groups){g.name=groupName(g.name);if(typeof g.id!=='string'||!g.id||groupIds.has(g.id)||groupNames.has(g.name.toLocaleLowerCase('de')))fail('Gruppen benötigen eindeutige IDs und Namen.');groupIds.add(g.id);groupNames.add(g.name.toLocaleLowerCase('de'));g.collapsed=g.collapsed===true;}if(p.workspace.groups.length>500)fail('Maximal 500 Gruppen pro Projekt.');
     p.workspace.revision=Number.isInteger(p.workspace.revision)?p.workspace.revision:0;
     for(const e of entries(p)){const o=e.object;o.properties=o.properties||{};o.workspace=o.workspace||{};o.workspace.group=o.workspace.group||kinds[e.type];o.workspace.status=o.workspace.status||(p.metadata.synthetic?'synthetisch':e.type==='boreholes'?'beobachtet':'interpretiert');o.workspace.source=o.workspace.source||(p.metadata.synthetic?'Erfundener Demonstrationsdatensatz':'');o.workspace.locked=o.workspace.locked===true;if(o.workspace.uncertainty_m!=null&&(!Number.isFinite(o.workspace.uncertainty_m)||o.workspace.uncertainty_m<0))fail('Lageunsicherheit muss eine nichtnegative Zahl sein.');if(e.type==='gisLayers'){for(const f of o.features){if(f.type==='Polygon')simpleRing(f.coordinates);for(const field of o.fields||[]){const v=f.properties?.[field.name];if(v!=null&&typeof v!==field.type)fail('Attribut '+field.name+': Datentyp passt nicht zur Felddefinition.');}}}}
     for(const o of groupObjects(p)){o.workspace=o.workspace||{};const g=p.workspace.groups.find(g=>g.id===o.workspace.groupId)||ensureGroup(p,o.workspace.group||'Unsortierte Layer');o.workspace.group=g.name;o.workspace.groupId=g.id;}
+    if(globalThis.GeoFieldData)for(const b of p.boreholes)b.end_depth=b.end_depth??b.intervals.at(-1).to;
+    if(globalThis.GeoFieldData)for(const r of p.rasterLayers||[]){if(!systems[r.sourceCRS])fail('Raster-Lagebezug wird noch nicht unterstützt: '+r.sourceCRS);for(const [i,j]of [[0,0],[r.width,0],[r.width,r.height],[0,r.height]]){const q=GeoFieldData.rasterPoint(p,r,i,j);if(r.placement==='terrain'&&C.terrainAt(p,...q)===null)fail('2D-Layer auf Gelände: Die Ausdehnung liegt außerhalb des Höhenmodells. Feste Darstellungshöhe wählen.');}}
     return p;
   }
   function transform(c,from,to,verticalFrom,verticalTo){

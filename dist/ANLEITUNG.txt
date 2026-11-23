@@ -1,4 +1,62 @@
-GEOLAB WORKSPACE 2.0 – NEUE WERKZEUGE
+GEOLAB WORKSPACE 2.1 – BOHRDATEN UND MESSRASTER
+
+
+ARBEITSFLÄCHE AUFRÄUMEN
+Unter Ansicht und Werkzeuge die benötigten Bedienfelder einschalten: Layer
+schneiden, Höhenüberhöhung, Koordinatengitter, Messen, Schnittprofil und
+Datenprüfung. Schließen entfernt das Feld. Die Auswahl wird im Projekt gesichert.
+Ein geschlossener Schnittregler setzt einen bestehenden Schnitt nicht zurück;
+"Schnitt aktiv" macht diesen Zustand sichtbar und öffnet den Regler erneut.
+Unter Ansicht stehen außerdem 2D, 3D, geteilte Ansicht und Kameraperspektiven.
+
+BOHRDATEN IMPORTIEREN UND BEARBEITEN
+Daten laden > Bohrdaten und Intervalle. Gemeinsame Tabelle oder getrennte
+Ansatz-/Intervalltabellen wählen, Tabellenblätter und Spalten zuordnen.
+Pflicht: Bohrungs-ID, X/Y, absolute Ansatzhöhe sowie positive Tiefen von/bis.
+Einheiten, Lage- und Höhenbezug ausdrücklich kontrollieren. Danach Vorschau
+prüfen und übernehmen. Überlappungen, widersprüchliche Ansätze und unbekannte
+Modell-IDs werden abgewiesen. Unbeschriebene Abschnitte bleiben erkennbare Lücken.
+Es werden vertikale Bohrungen unterstützt. Originaldateien bleiben separat.
+Unterstützt: CSV/TSV/TXT, XLSX/XLS/XLSB/ODS, JSON-Tabellen, GeoJSON-Punkte als
+Ansatzpunkte, AGS4 LOCA/GEOL und LAS-1.2/2.0-Bohrlogs. LAS ist hier das
+Well-Log-Format, keine LiDAR-Punktwolke. Kurven ergeben keine Lithologie.
+
+Bohrung wählen > Intervalle bearbeiten. Von/bis, Lithologie und ausdrückliche
+Modellzuordnung sind unabhängig. Gleiche Gesteinsnamen verbinden keine Kontakte.
+Mit Modell vergleichen zeigt beobachtete Kontakthöhe minus Modellhöhe in Metern.
+Bohrungen können Modellgrundlage oder unabhängige Kontrolle sein. Synthetische
+Bohrdaten sind keine unabhängige Validierung. Der Vergleich ändert keine Geometrie.
+Im Schnittprofil werden Bohrungen aus einem wählbaren Korridor projiziert; der
+seitliche Abstand wird angegeben. Intervall anklicken verknüpft Profil,
+Bohrungsauswahl und Markierung im 3D-Modell. Rasterprofile haben eine eigene
+Messwertachse; sie verwenden keine Höhenwerte für Magnetikanomalien.
+
+2D-MESSRASTER UND KARTEN
+Daten laden > 2D-Messraster und Karten. Unterstützt: numerisches GeoTIFF-Band,
+ESRI ASCII, regelmäßige XYZ/CSV/TSV/TXT-Tabellen, Excel/ODS, Surfer DSAA/DSBB/DSRB
+(DSRB ohne Rotation), Raster-JSON sowie PNG/JPG mit Worldfile oder bestätigter
+Ausdehnung. Unregelmäßige Punkte benötigen vorher eine fachliche Rasterung.
+Messgröße, Einheit, Bezug, Farbskala und Anzeigeoptionen sind je Layer einstellbar.
+NoData bleibt transparent. Die Einzelabfrage liest den Originalzellenwert.
+3D-Darstellung erfolgt optional auf einer Z-Ebene oder auf dem Gelände.
+Darstellungshöhe und Messwert sind getrennte Größen. Kartenbilder enthalten
+keine abfragbaren Zahlen. Die synthetische Magnetik enthält beliebige Farbwerte,
+keine physikalische Berechnung der Granitintrusion.
+
+Die neuen Vorlagen 08–14 passen zur projektvorlage.geolab.json im Bezug LOCAL.
+10-bohrdaten.xlsx enthält Ansatzpunkte und Intervalle; alternativ 08 + 09 laden.
+Die Beispiele sind synthetisch. 11–14 zeigen ein kleines Messraster in mehreren
+Formaten; ESRI ASCII verwendet einen quadratischen Zellausschnitt.
+Für das große UTM-Demomodell den Magnetik-Demoraster direkt im Datenmenü wählen.
+
+FORMATGRENZEN
+32 MB je Importdatei; Projektdateien bis 128 MB. Numerische Raster maximal
+262.144 Zellen und 100 Rasterlayer. Kartenbilder maximal 2.048 Pixel je Seite
+und 4.194.304 Pixel. Bohrlogs maximal 100.000 Tiefenzeilen, 64 Kurven und
+1.000.000 Werte. Browserplatz und Geräteleistung bleiben praktische Grenzen.
+Nicht direkt gelesen werden Shapefile, GeoPackage, SEG-Y, LiDAR-LAS/LAZ,
+LAS 3 und proprietäre Bohrdatenbanken. Geeignete Austauschformate verwenden.
+Die Anwendung besitzt keine automatische Höhen-/Datums-/Epochenumrechnung.
 
 PROJEKTE
 Über Projekte ein leeres Projekt, eine neue Demo oder eine Szenariokopie anlegen.
@@ -31,8 +89,8 @@ GIS-Objekte haben eigene Attributfelder mit Typ und optionaler Einheit. Ihre
 Stützpunkte werden numerisch bearbeitet; Verschieben und Drehen benötigt ein
 explizites Drehzentrum. Zeichnen ist im 2D-Grundriss mit Fangfunktion möglich.
 Kartenklicks sind digitalisiert. Exakte Eingabekoordinaten über die numerischen
-Felder kontrollieren. Geologische Gitter und Bohrintervalle werden über die
-Datenvorlagen bearbeitet. Rückgängig/Wiederholen hält acht Änderungen in dieser
+Felder kontrollieren. Bohrintervalle werden direkt im Bearbeitungsdialog geändert; geologische Gitter
+werden über die Datenvorlagen ausgetauscht. Rückgängig/Wiederholen hält acht Änderungen in dieser
 Sitzung; das dauerhafte Änderungsprotokoll enthält Beschreibungen.
 
 RAUMBEZUG UND MESSEN
@@ -67,7 +125,8 @@ Differenzen zwischen zugeordneten Bohrkontakten und Körpergrenzen. Die Prüfung
 ersetzt keine unabhängige fachliche Modellvalidierung.
 
 TECHNIK
-Proj4js 2.23.0 und GeographicLib-Geodesic 2.2.0 sind lokal eingebunden; die
+Proj4js 2.23.0, GeographicLib-Geodesic 2.2.0, SheetJS CE 0.20.3 und
+geotiff.js 3.0.5 sind lokal eingebunden; die
 Lizenztexte liegen im Ordner lizenzen. Keine nachgeladenen Bibliotheken, keine
 Anmeldung und keine Übertragung importierter Daten an einen Server.
 
@@ -120,7 +179,8 @@ zusätzlichen Geolayer über '+ Hinzufügen' eine neue eindeutige layer_id verwe
 KOORDINATEN UND HÖHEN
 X und Y sind projizierte Koordinaten in Metern, beispielsweise UTM-Koordinaten.
 Z ist eine absolute Höhe im von dir angegebenen Bezug (z. B. m NHN).
-CSV und Gitter werden ohne Umrechnung eingelesen. GeoJSON kann über Daten laden
+CSV-Modellgitter werden ohne Umrechnung eingelesen. Bohrdaten, Messraster und
+GeoJSON können mit ausdrücklich gewähltem Quellbezug über Daten laden
 innerhalb derselben unterstützten Datumsfamilie projiziert werden. Keine
 automatische Datums-, Epochen- oder Höhentransformation.
 Längen- und Breitengrade dürfen nicht als X/Y in Metern eingesetzt werden.
@@ -159,8 +219,9 @@ werden von diesem Modell aus übereinanderliegenden Grenzflächen nicht abgebild
 Bohrungen:
   borehole_id;name;x;y;collar_z;from_m;to_m;layer_id;body_id;facies;lithology
 Eine Zeile pro Intervall. Ansatzdaten müssen für alle Zeilen derselben Bohrung
-übereinstimmen. Intervalle dürfen sich nicht überschneiden. Ihre layer_id muss
-zu einer importierten Schicht passen, wenn geologische Schichten vorhanden sind.
+übereinstimmen. Intervalle dürfen sich nicht überschneiden. Eine angegebene layer_id muss
+zu einer importierten Schicht passen. Ohne Zuordnung bleiben Beobachtungen
+gültig, werden aber nicht automatisch mit einer Modellgrenze verglichen.
 Die letzten drei Spalten body_id, facies und lithology sind optional. body_id
 ordnet ein Intervall einem zuvor importierten lokalen Körper zu. Die
 Körpergeometrien werden nicht automatisch aus den Bohrprofilen berechnet.
